@@ -1,5 +1,5 @@
 # E-Commerce Web Application
-
+abiyoso danar panji
 ## Project Description
 This is an e-commerce web application developed using JSP and Servlet technology, implementing the MVC (Model-View-Controller) design pattern. The application provides features for user account management, product browsing, cart management, and order logging. 
 
