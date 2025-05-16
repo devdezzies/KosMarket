@@ -10,14 +10,23 @@ This is an e-commerce web application developed using JSP and Servlet technology
 ## Features
 - User authentication (Admin, Member, Guest)
 - Product browsing and search by category or name
-- Shopping cart functionality
-- Order management (logs)
+- Order management (sold out product history)
 - Bookmarking products for future reference
 - Admin functionality for managing products and categories
 
 ---
 
 ## Todos
+### Additional Todos
+
+- [ ] **Design UI**  
+    _Deadline: Tuesday, 20 May 2025_ — Upan & Hilmi
+- [ ] **Update class diagram**  
+    _Deadline: Sunday, 18 May 2025_ — Everyone
+- [ ] **Create dummy data**  
+    _Deadline: Monday, 19 May 2025_ — Abdullah
+- [ ] **Develop views** (Start after dummy data is completed)  
+    _Deadline: To be determined_ — Everyone
 
 ### Initial Setup
 - [ ] Set up database connection (`DatabaseConnection.java`).
@@ -40,4 +49,22 @@ This is an e-commerce web application developed using JSP and Servlet technology
 ### Deployment
 - [ ] Deploy the application to a server.
 
+
+## Pembagian Tugas (View)
+
+- **Abdullah:** Login, Register
+- **Abi:** Product Info (Sell)
+- **Fery:** Profile, Account
+- **Beben:** Product Info (Buy)
+- **Upan:** Beranda
+- **Hilmi:** Admin
+
+## Pembagian Tugas (Fitur)
+
+- **Abdullah:** Database Connection, User Authentication (Admin, Member, Guest)
+- **Abi:** _(Belum ditentukan)_
+- **Fery:** _(Belum ditentukan)_
+- **Beben:** _(Belum ditentukan)_
+- **Upan:** _(Belum ditentukan)_
+- **Hilmi:** _(Belum ditentukan)_
 ---
