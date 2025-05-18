@@ -11,6 +11,7 @@
 	<title>KosMarket - Account</title>
 	<%@ include file="/WEB-INF/includes/header.jsp" %>
 </head>
+<%--HAPUS AJA, INI CUMA TEMPLATE--%>
 <body class="bg-gray-100 min-h-screen">
 	<div class="container mx-auto px-4 py-8">
 		<h1 class="text-3xl font-bold text-blue-600 mb-4">My Account</h1>
