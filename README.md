@@ -21,9 +21,9 @@ This is an e-commerce web application developed using JSP and Servlet technology
 
 - [ ] **Design UI**  
     _Deadline: Tuesday, 20 May 2025_ — Upan & Hilmi
-- [ ] **Update class diagram**  
+- [X] **Update class diagram**  
     _Deadline: Sunday, 18 May 2025_ — Everyone
-- [ ] **Create dummy data**  
+- [X] **Create dummy data**  
     _Deadline: Monday, 19 May 2025_ — Abdullah
 - [ ] **Develop views** (Start after dummy data is completed)  
     _Deadline: To be determined_ — Everyone
