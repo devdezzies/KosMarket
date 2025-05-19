@@ -1,0 +1,14 @@
+{
+  "name": "kosmarket",
+  "version": "1.0.0",
+  "description": "KosMarket e-commerce application",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css",
+    "watch:css": "tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.5",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31"
+  }
+}

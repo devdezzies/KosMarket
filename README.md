@@ -21,9 +21,9 @@ This is an e-commerce web application developed using JSP and Servlet technology
 
 - [ ] **Design UI**  
     _Deadline: Tuesday, 20 May 2025_ — Upan & Hilmi
-- [ ] **Update class diagram**  
+- [X] **Update class diagram**  
     _Deadline: Sunday, 18 May 2025_ — Everyone
-- [ ] **Create dummy data**  
+- [X] **Create dummy data**  
     _Deadline: Monday, 19 May 2025_ — Abdullah
 - [ ] **Develop views** (Start after dummy data is completed)  
     _Deadline: To be determined_ — Everyone
@@ -68,3 +68,47 @@ This is an e-commerce web application developed using JSP and Servlet technology
 - **Upan:** _(Belum ditentukan)_
 - **Hilmi:** _(Belum ditentukan)_
 ---
+
+## Tailwind CSS Setup
+
+This project uses Tailwind CSS for styling. Follow these steps to set up and build the CSS:
+
+### Prerequisites
+
+- Node.js and npm installed on your machine
+
+### Installation
+
+1. Install the required npm packages:
+
+```bash
+npm install
+```
+
+### Building CSS
+
+To build the Tailwind CSS file:
+
+```bash
+npm run build:css
+```
+
+This will process the input CSS file at `src/main/webapp/css/input.css` and output the compiled Tailwind CSS to `src/main/webapp/css/tailwind.css`.
+
+### Development Mode
+
+To watch for changes and automatically rebuild the CSS during development:
+
+```bash
+npm run watch:css
+```
+
+### Usage
+
+After building the CSS, the Tailwind styles will be available in all JSP pages that include the header:
+
+```jsp
+<%@ include file="/WEB-INF/includes/header.jsp" %>
+```
+
+The header includes a link to the compiled Tailwind CSS file.
