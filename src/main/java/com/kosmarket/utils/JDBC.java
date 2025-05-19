@@ -4,71 +4,62 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBC implements AutoCloseable {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/kosmarket";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
-    private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-
+public class JDBC {
     private Connection connection;
+    private Statement stmt;
+    private boolean isConnected;
+    private String message;
 
-    public JDBC() {
-        connect();
-    }
-
-    private void connect() {
+    public void connect() {
+        String dbName = "kosmarket";
+        String username = "root";
+        String password = "";
         try {
-            Class.forName(DB_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, username, password);
+            stmt = connection.createStatement();
+            isConnected = true;
+            message = "Connected to database";
         } catch (Exception e) {
-            throw new RuntimeException("Failed to connnect to database: " + e.getMessage(), e);
+            isConnected = false;
+            message = "Error: " + e.getMessage();
         }
     }
 
-    // FOR INSERT, UPDATE, DELETE METHOD
-    public int executeUpdate(String sql, Object... params) {
-        try (PreparedStatement stmt = prepare(sql, params)) {
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("DB update failed: " + e.getMessage(), e);
-        }
-    }
-
-    // FOR "GET" METHOD
-    public List<Object[]> executeQuery(String sql, Object... params) {
-        try (PreparedStatement stmt = prepare(sql, params);
-             ResultSet rs = stmt.executeQuery()) {
-            List<Object[]> rows = new ArrayList<>();
-            int cols = rs.getMetaData().getColumnCount();
-            while (rs.next()) {
-                Object[] row = new Object[cols];
-                for (int i = 0; i < cols; i++) {
-                    row[i] = rs.getObject(i + 1);
-                }
-                rows.add(row);
-            }
-            return rows;
-        } catch (SQLException e) {
-            throw new RuntimeException("DB query failed: " + e.getMessage(), e);
-        }
-    }
-
-    private PreparedStatement prepare(String sql, Object... params) throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        for (int i = 0; i < params.length; i++) {
-            stmt.setObject(i + 1, params[i]);
-        }
-        return stmt;
-    }
-
-    @Override
-    public void close() throws Exception {
+    public void disconnect() {
         try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to close database connection: " + e.getMessage(), e);
+            stmt.close();
+            connection.close();
+        } catch (Exception e) {
+            message = "Error: " + e.getMessage();
         }
+    }
+
+    public void runQuery(String query) {
+        try {
+            connect();
+            int result = stmt.executeUpdate(query);
+            message = "info: " + result + " rows affected";
+        } catch (Exception e) {
+            message = "Error: " + e.getMessage();
+            System.out.println(e.getMessage());
+        } finally {
+            disconnect();
+        }
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public ResultSet getData(String query) {
+        ResultSet rs = null;
+        try {
+            connect();
+            rs = stmt.executeQuery(query);
+        } catch (Exception e) {
+            message = "Error: " + e.getMessage();
+        }
+        return rs;
     }
 }
