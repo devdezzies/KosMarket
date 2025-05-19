@@ -9,7 +9,7 @@
 <html>
 <head>
 	<title>KosMarket - Orders</title>
-	<%@ include file="/WEB-INF/includes/header.jsp" %>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <%--HAPUS AJA, INI CUMA TEMPLATE--%>
 <body class="bg-gray-100 min-h-screen">
