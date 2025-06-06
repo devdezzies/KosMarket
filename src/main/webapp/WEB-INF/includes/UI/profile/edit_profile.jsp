@@ -28,7 +28,7 @@
     </div>
 
     <!-- Profile Form -->
-    <form class="space-y-6">
+    <form class="space-y-6" action="/home" method="POST">>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- First Name -->
             <div>
