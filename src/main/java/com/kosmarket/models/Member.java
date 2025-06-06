@@ -1,13 +1,17 @@
 package com.kosmarket.models;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Member extends Account {
+public class Member extends Model<Member> {
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
+    private String username;
+    private String hashedPassword;
     private String profilePicture;
     private Address address;
     private Date createdAt;
@@ -16,20 +20,21 @@ public class Member extends Account {
 
     // registration
     public Member() {
-        super(null, null);
-        this.postedProducts = new ArrayList<>();
-        this.bookmark = new Bookmark();
-        this.address = new Address();
-        this.createdAt = new Date();
+        this.table = "member";
+        this.primaryKey = "id";
     }
 
-    // Constructor with all fields
-    public Member(String username, String hashedPassword, String firstName, String lastName, String email, 
+    // constructor with all fields
+    public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
                  String profilePicture, Address address, Date createdAt, Bookmark bookmark) {
-        super(username, hashedPassword);
+        this.table = "member";
+        this.primaryKey = "id";
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.username = username;
+        this.hashedPassword = hashedPassword;
         this.profilePicture = profilePicture;
         this.address = address;
         this.createdAt = createdAt;
@@ -37,11 +42,23 @@ public class Member extends Account {
         this.postedProducts = new ArrayList<>();
     }
 
-    // login
-    public Member(String email) {
-        super(null, null);
-        this.email = email;
-        this.postedProducts = new ArrayList<>();
+    @Override
+    public Member toModel(ResultSet rs) {
+        try {
+            Member member = new Member();
+            member.setId(rs.getInt("id"));
+            member.setFirstName(rs.getString("firstName"));
+            member.setLastName(rs.getString("lastName"));
+            member.setEmail(rs.getString("email"));
+            member.setUsername(rs.getString("username"));
+            member.setHashedPassword(rs.getString("hashedPassword"));
+            member.setCreatedAt(rs.getDate("createdAt"));
+            member.setProfilePicture(rs.getString("profilePicture"));
+            return member;
+        } catch (SQLException E) {
+            System.out.println(E.getMessage());
+            return null;
+        }
     }
 
     public String getFirstName() {
@@ -54,6 +71,14 @@ public class Member extends Account {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
     public Address getAddress() {
@@ -109,12 +134,24 @@ public class Member extends Account {
         this.email = email;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
     public void setAddress(Address address) {
         this.address = address;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void addProduct(Product product) {
@@ -124,55 +161,10 @@ public class Member extends Account {
         postedProducts.add(product);
     }
 
-    @Override
-    public boolean login(String password) {
-        try {
-            String sanitizedEmail = this.email.replace("'", "''");
-            String sanitizedPassword = password.replace("'", "''");
-            String query = "SELECT * FROM member WHERE email = '" + sanitizedEmail + "' AND hashedPassword = '" + sanitizedPassword + "'";
-            ResultSet rs = getData(query);
-
-            if (rs.next()) {
-                this.setId(rs.getInt("id"));
-                this.setUsername(rs.getString("username"));
-                this.setHashedPassword(rs.getString("hashedPassword"));
-                this.setFirstName(rs.getString("firstName"));
-                this.setLastName(rs.getString("lastName"));
-                this.setEmail(rs.getString("email"));
-
-                if (rs.getString("profilePicture") != null) {
-                    this.setProfilePicture(rs.getString("profilePicture"));
-                }
-
-                if (rs.getTimestamp("createdAt") != null) {
-                    this.setCreatedAt(new Date(rs.getTimestamp("createdAt").getTime()));
-                } else {
-                    this.setCreatedAt(new Date());
-                }
-
-                if (this.address == null) {
-                    this.address = new Address();
-                }
-
-                if (this.bookmark == null) {
-                    this.bookmark = new Bookmark();
-                }
-
-                if (this.postedProducts == null) {
-                    this.postedProducts = new ArrayList<>();
-                }
-
-                // TODO Load user's bookmarks and posted products
-
-                disconnect();
-                return true;
-            }
-
-            disconnect();
-            return false;
-        } catch (Exception e) {
-            System.out.println("Error during login: " + e.getMessage());
-            return false;
-        }
+    public ArrayList<Member> findByEmail(String email) {
+        String sql = "SELECT * FROM " + this.table + " WHERE email = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(email);
+        return this.queryWithParams(sql, params);
     }
 }

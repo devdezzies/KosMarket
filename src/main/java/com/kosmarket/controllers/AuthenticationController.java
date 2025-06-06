@@ -1,96 +1,153 @@
 package com.kosmarket.controllers;
 
-import java.io.*;
-
-import com.kosmarket.models.Guest;
 import com.kosmarket.models.Member;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "AuthenticationControllerServlet", urlPatterns = "/auth")
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
+@WebServlet(name = "AuthenticationControllerServlet", urlPatterns = "/authentication")
 public class AuthenticationController extends HttpServlet {
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String menu = request.getParameter("menu");
-        if (request.getParameterMap().isEmpty() || menu == null) {
+
+        if (menu == null) {
             request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
-        } else if ("check".equals(menu)) {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            return;
+        }
 
-            boolean isValidUser = false;
+        switch (menu) {
+            case "check":
+                handleLogin(request, response);
+                break;
+            case "register":
+                handleRegister(request, response);
+                break;
+            case "logout":
+                handleLogout(request, response);
+                break;
+            default:
+                request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+                break;
+        }
+    }
 
-            try {
-                Member member = new Member(email);
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        response.sendRedirect(request.getContextPath() + "/authentication");
+    }
 
-                isValidUser = member.login(password);
+    private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-                if (isValidUser) {
-                    // session for logged-in user
+        try {
+            Member memberModel = new Member();
+            ArrayList<Member> users = memberModel.findByEmail(email);
+
+            if (!users.isEmpty()) {
+                Member user = users.get(0);
+                if (password.equals(user.getHashedPassword())) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("member", member);
+                    session.setAttribute("member", user);
                     session.setAttribute("isLoggedIn", true);
-
                     response.sendRedirect(request.getContextPath() + "/home");
                 } else {
                     request.setAttribute("errorMessage", "Invalid email or password");
                     request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
                 }
-            } catch (Exception e) {
-                request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
+            } else {
+                request.setAttribute("errorMessage", "Invalid email or password");
                 request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
             }
-        } else if ("register".equals(menu)) {
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String confirmPassword = request.getParameter("confirm-password");
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+        }
+    }
 
-            try {
-                // validate input
-                if (firstName == null || firstName.trim().isEmpty() ||
+    private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirm-password");
+
+        try {
+            // validate input
+            if (firstName == null || firstName.trim().isEmpty() ||
                     lastName == null || lastName.trim().isEmpty() ||
                     email == null || email.trim().isEmpty() ||
                     password == null || password.trim().isEmpty() ||
                     confirmPassword == null || confirmPassword.trim().isEmpty()) {
 
-                    request.setAttribute("errorMessage", "All fields are required");
-                    request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
-                    return;
-                }
-
-                // check if passwords match
-                if (!password.equals(confirmPassword)) {
-                    request.setAttribute("errorMessage", "Passwords do not match");
-                    request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
-                    return;
-                }
-
-                // register using as a guest
-                Guest guest = new Guest();
-                Member newMember = guest.registerAccount(firstName, lastName, email, password);
-
-                HttpSession session = request.getSession();
-                session.setAttribute("member", newMember);
-                session.setAttribute("isLoggedIn", true);
-                if (newMember != null) {
-                    response.sendRedirect(request.getContextPath() + "/home");
-                }
-            } catch (Exception e) {
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute("errorMessage", "All fields are required");
                 request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+                return;
             }
+
+            // check if passwords match
+            if (!password.equals(confirmPassword)) {
+                request.setAttribute("errorMessage", "Passwords do not match");
+                request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+                return;
+            }
+
+            // check if email already exists
+            Member existingMemberCheck = new Member();
+            if (!existingMemberCheck.findByEmail(email).isEmpty()) {
+                request.setAttribute("errorMessage", "Email already exists");
+                request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+                return;
+            }
+
+            // register using Member model
+            Member newMember = new Member();
+            newMember.setFirstName(firstName);
+            newMember.setLastName(lastName);
+            newMember.setEmail(email);
+            newMember.setUsername(email); // Using email as username by default
+            newMember.setHashedPassword(password); // TODO: implement password hashing
+            newMember.setCreatedAt(new Date());
+
+            newMember.insert();
+
+            // fetch the newly created member to get all data (including ID)
+            ArrayList<Member> users = newMember.findByEmail(email);
+
+
+            if (!users.isEmpty()) {
+                Member memberForSession = users.get(0);
+                HttpSession session = request.getSession();
+                session.setAttribute("member", memberForSession);
+                session.setAttribute("isLoggedIn", true);
+                response.sendRedirect(request.getContextPath() + "/home");
+            } else {
+                throw new Exception("Failed to retrieve user after registration.");
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Registration failed: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
         }
     }
 
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         processRequest(request, response);
     }
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         processRequest(request, response);
     }
-
 }
