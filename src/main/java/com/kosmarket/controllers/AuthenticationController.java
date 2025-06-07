@@ -56,7 +56,7 @@ public class AuthenticationController extends HttpServlet {
             ArrayList<Member> users = memberModel.findByEmail(email);
 
             if (!users.isEmpty()) {
-                Member user = users.get(0);
+                Member user = users.getFirst();
                 if (password.equals(user.getHashedPassword())) {
                     HttpSession session = request.getSession();
                     session.setAttribute("member", user);
