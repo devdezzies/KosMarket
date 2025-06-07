@@ -167,4 +167,11 @@ public class Member extends Model<Member> {
         params.add(email);
         return this.queryWithParams(sql, params);
     }
+
+    public ArrayList<Member> findByUsername(String username) {
+        String sql = "SELECT * FROM " + this.table + " WHERE username = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        return this.queryWithParams(sql, params);
+    }
 }
