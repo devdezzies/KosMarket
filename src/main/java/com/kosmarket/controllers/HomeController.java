@@ -22,6 +22,7 @@ public class HomeController extends HttpServlet {
         String[] categories = request.getParameterValues("category");
         String minPrice = request.getParameter("min-price");
         String maxPrice = request.getParameter("max-price");
+        String search = request.getParameter("search");
 
         List<String> conditions = new ArrayList<>();
 
@@ -37,6 +38,10 @@ public class HomeController extends HttpServlet {
             conditions.add("price <= " + maxPrice);
         }
 
+        if (search != null && !search.isEmpty()) {
+            conditions.add("name LIKE '%" + search + "%'");
+        }
+
         if (!conditions.isEmpty()) {
             productModel.where(String.join(" AND ", conditions));
         }
@@ -45,6 +50,7 @@ public class HomeController extends HttpServlet {
         request.setAttribute("selectedCategories", categories != null ? java.util.Arrays.asList(categories) : new java.util.ArrayList<String>());
         request.setAttribute("minPrice", minPrice);
         request.setAttribute("maxPrice", maxPrice);
+        request.setAttribute("search", search);
 
         List<Product> products = productModel.get();
         request.setAttribute("products", products);
