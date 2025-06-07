@@ -10,7 +10,7 @@
     String firstName = currentMember.getFirstName();
     String email = currentMember.getEmail();
 %>
-<nav class="bg-white text-gray-800 p-4 shadow-md font-sans">
+<nav class="bg-white text-gray-800 p-4 shadow-md font-sans sticky top-0 z-50 w-full">
     <div class="container mx-auto flex items-center justify-between flex-wrap">
         <a href="${pageContext.request.contextPath}/" class="font-bold text-2xl" style="font-family: 'Quicksand', sans-serif;">KosMarket</a>
 
