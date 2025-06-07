@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="flex flex-col justify-center min-h-screen py-12 px-4 sm:px-6">
+<div class="flex min-h-full flex-col justify-center py-12 px-4 sm:px-6">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
     <h1 class="mx-auto text-center text-5xl">👋️</h1>
     <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Hi, Welcome Back!</h2>

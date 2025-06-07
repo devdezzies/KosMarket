@@ -1,6 +1,7 @@
 package com.kosmarket.controllers;
 
 import com.kosmarket.models.Member;
+import com.kosmarket.utils.PasswordUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ public class AuthenticationController extends HttpServlet {
 
             if (!users.isEmpty()) {
                 Member user = users.getFirst();
-                if (password.equals(user.getHashedPassword())) {
+                if (PasswordUtil.checkPassword(password, user.getHashedPassword())) {
                     HttpSession session = request.getSession();
                     session.setAttribute("member", user);
                     session.setAttribute("isLoggedIn", true);
@@ -79,6 +80,7 @@ public class AuthenticationController extends HttpServlet {
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
+        String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
@@ -87,11 +89,13 @@ public class AuthenticationController extends HttpServlet {
             // validate input
             if (firstName == null || firstName.trim().isEmpty() ||
                     lastName == null || lastName.trim().isEmpty() ||
+                    username == null || username.trim().isEmpty() ||
                     email == null || email.trim().isEmpty() ||
                     password == null || password.trim().isEmpty() ||
                     confirmPassword == null || confirmPassword.trim().isEmpty()) {
 
                 request.setAttribute("errorMessage", "All fields are required");
+                request.setAttribute("tab", "register");
                 request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
                 return;
             }
@@ -99,14 +103,24 @@ public class AuthenticationController extends HttpServlet {
             // check if passwords match
             if (!password.equals(confirmPassword)) {
                 request.setAttribute("errorMessage", "Passwords do not match");
+                request.setAttribute("tab", "register");
+                request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
+                return;
+            }
+
+            Member existingMemberCheck = new Member();
+            // check if username already exists
+            if (!existingMemberCheck.findByUsername(username).isEmpty()) {
+                request.setAttribute("errorMessage", "Username already exists. Please choose another one.");
+                request.setAttribute("tab", "register");
                 request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
                 return;
             }
 
             // check if email already exists
-            Member existingMemberCheck = new Member();
             if (!existingMemberCheck.findByEmail(email).isEmpty()) {
-                request.setAttribute("errorMessage", "Email already exists");
+                request.setAttribute("errorMessage", "Email already exists. Please use another email or login.");
+                request.setAttribute("tab", "register");
                 request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
                 return;
             }
@@ -116,8 +130,8 @@ public class AuthenticationController extends HttpServlet {
             newMember.setFirstName(firstName);
             newMember.setLastName(lastName);
             newMember.setEmail(email);
-            newMember.setUsername(email); // Using email as username by default
-            newMember.setHashedPassword(password); // TODO: implement password hashing
+            newMember.setUsername(username);
+            newMember.setHashedPassword(PasswordUtil.hashPassword(password));
             newMember.setCreatedAt(new Date());
 
             newMember.insert();
@@ -137,6 +151,7 @@ public class AuthenticationController extends HttpServlet {
             }
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Registration failed: " + e.getMessage());
+            request.setAttribute("tab", "register");
             request.getRequestDispatcher("/WEB-INF/views/authentication.jsp").forward(request, response);
         }
     }
