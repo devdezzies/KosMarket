@@ -9,6 +9,7 @@
     Member currentMember = (Member) session.getAttribute("member");
     String firstName = currentMember.getFirstName();
     String email = currentMember.getEmail();
+    String search = (String) request.getAttribute("search");
 %>
 <nav class="bg-white text-gray-800 p-4 shadow-md font-sans sticky top-0 z-50 w-full">
     <div class="container mx-auto flex items-center justify-between flex-wrap">
@@ -27,13 +28,17 @@
         <div class="hidden md:flex items-center space-x-6">
             <!-- search bar -->
             <div class="relative w-full max-w-xl min-w-xl">
-                <input type="text" placeholder="Cari apa hari ini..." class="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                    <!-- search Icon -->
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                    </svg>
-                </div>
+                <form action="/home" method="GET">
+                    <label for="search" type="hidden"></label><input type="text" id="search" name="search" placeholder="Cari apa hari ini..." class="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" value="<%= search != null ? search : "" %>">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <!-- search Icon -->
+                        <button type="submit">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <!-- desktop icons -->
