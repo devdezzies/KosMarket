@@ -6,9 +6,6 @@
 <%
     List<Product> products = (List<Product>) request.getAttribute("products");
     List<ProductCategory> categories = (List<ProductCategory>) request.getAttribute("categories");
-    List<String> selectedCategories = (List<String>) request.getAttribute("selectedCategories");
-    String minPrice = (String) request.getAttribute("minPrice");
-    String maxPrice = (String) request.getAttribute("maxPrice");
 %>
 
 <div class="container mx-auto px-4 py-8" style="font-family: 'Quicksand', sans-serif;">
@@ -22,6 +19,7 @@
         <aside class="w-full md:w-1/4 pr-0 md:pr-8 mb-8 md:mb-0">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <form action="/home" method="GET">
+                    <input type="hidden" name="search" value="<%= search != null ? search : "" %>">
                     <div x-data="{ open: true }" class="mb-4">
                         <button type="button" @click="open = !open" class="w-full flex justify-between items-center cursor-pointer">
                             <h3 class="font-bold text-lg">Kategori</h3>
