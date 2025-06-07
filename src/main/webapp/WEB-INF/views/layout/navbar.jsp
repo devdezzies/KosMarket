@@ -1,4 +1,5 @@
 <%@page import="com.kosmarket.models.Member"%>
+<%@ page import="java.util.List" %>
 <%
     HttpSession userSession = request.getSession(false);
     if (userSession == null || userSession.getAttribute("isLoggedIn") == null) {
@@ -10,6 +11,9 @@
     String firstName = currentMember.getFirstName();
     String email = currentMember.getEmail();
     String search = (String) request.getAttribute("search");
+    List<String> selectedCategories = (List<String>) request.getAttribute("selectedCategories");
+    String minPrice = (String) request.getAttribute("minPrice");
+    String maxPrice = (String) request.getAttribute("maxPrice");
 %>
 <nav class="bg-white text-gray-800 p-4 shadow-md font-sans sticky top-0 z-50 w-full">
     <div class="container mx-auto flex items-center justify-between flex-wrap">
@@ -29,6 +33,14 @@
             <!-- search bar -->
             <div class="relative w-full max-w-xl min-w-xl">
                 <form action="/home" method="GET">
+                    <% if (selectedCategories != null) {
+                        for (String categoryId : selectedCategories) { %>
+                            <input type="hidden" name="category" value="<%= categoryId %>">
+                        <% }
+                    } %>
+                    <input type="hidden" name="min-price" value="<%= minPrice != null ? minPrice : "" %>">
+                    <input type="hidden" name="max-price" value="<%= maxPrice != null ? maxPrice : "" %>">
+
                     <label for="search" type="hidden"></label><input type="text" id="search" name="search" placeholder="Cari apa hari ini..." class="w-full py-2 px-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" value="<%= search != null ? search : "" %>">
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                         <!-- search Icon -->
