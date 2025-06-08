@@ -1,16 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="flex flex-col justify-center min-h-screen py-12 px-4 sm:px-6">
+<div class="flex min-h-full flex-col justify-center py-12 px-4 sm:px-6">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
     <h1 class="mx-auto text-center text-5xl">✨</h1>
     <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Create Your Account</h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
+    <form class="space-y-6" action="${pageContext.request.contextPath}/authentication?menu=register" method="POST">
       <div>
-        <label for="name" class="block text-sm/6 font-medium text-gray-900">Full Name</label>
+        <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
         <div class="mt-2">
-          <input type="text" name="name" id="name" autocomplete="name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+          <input type="text" name="firstName" id="firstName" autocomplete="given-name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+        </div>
+      </div>
+
+      <div>
+        <label for="lastName" class="block text-sm/6 font-medium text-gray-900">Last Name</label>
+        <div class="mt-2">
+          <input type="text" name="lastName" id="lastName" autocomplete="family-name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+        </div>
+      </div>
+
+      <div>
+        <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+        <div class="mt-2">
+          <input type="text" name="username" id="username" autocomplete="username" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
         </div>
       </div>
 

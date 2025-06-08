@@ -1,21 +1,24 @@
 package com.kosmarket.controllers;
 
-import java.io.*;
-
+import com.kosmarket.models.Product;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ProductControllerServlet", urlPatterns = "/product")
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(name = "ProductControllerServlet", urlPatterns = "/products")
 public class ProductController extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        response.setContentType("text/html");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Product productModel = new Product();
+        List<Product> products = productModel.get();
 
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("</body></html>");
+        request.setAttribute("products", products);
+        request.getRequestDispatcher("/WEB-INF/views/products/index.jsp").forward(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
