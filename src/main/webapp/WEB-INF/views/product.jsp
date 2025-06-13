@@ -29,7 +29,7 @@
 	}
 %>
 
-<div class="bg-gray-50 min-h-screen py-6">
+<div class="bg-white min-h-screen py-6">
 	<div class="container mx-auto px-4 max-w-6xl">
 		<!-- Breadcrumb -->
 		<nav class="mb-6">

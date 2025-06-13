@@ -15,10 +15,8 @@ public class Product extends Model<Product> {
     private int itemCount;
     private Timestamp createdAt;
     private ProductCategory category;
-    private String location;
     private String imageUrl;
     private int categoryId;
-    private int memberId;
 
     public Product() {
         super();
@@ -26,7 +24,7 @@ public class Product extends Model<Product> {
         this.primaryKey = "id";
     }
 
-    public Product(String name, Member member, String description, double price, int itemCount, ProductCategory category, String location, String imageUrl) {
+    public Product(String name, Member member, String description, double price, int itemCount, ProductCategory category, String imageUrl) {
         this();
         this.name = name;
         this.member = member;
@@ -35,7 +33,7 @@ public class Product extends Model<Product> {
         this.price = price;
         this.itemCount = itemCount;
         this.category = category;
-        this.location = location;
+//      this.location = location;
         this.imageUrl = imageUrl;
     }
 
@@ -77,8 +75,6 @@ public class Product extends Model<Product> {
         return name;
     }
 
-
-
     public Member getMember() { return member; }
 
     public int getMemberId() { return memberId; }
@@ -100,10 +96,6 @@ public class Product extends Model<Product> {
 
     public ProductCategory getCategory() {
         return category;
-    }
-
-    public String getLocation() {
-        return location;
     }
 
     public String getImageUrl() {
@@ -144,10 +136,6 @@ public class Product extends Model<Product> {
 
     public void setCategory(ProductCategory category) {
         this.category = category;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public void setCategoryId(int category) {
