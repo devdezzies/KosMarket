@@ -2,16 +2,23 @@ package com.kosmarket.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Timestamp;
 
 public class Product extends Model<Product> {
     private int id;
     private String name;
+    private Member member;
+    private int memberId;
     private String description;
     private double price;
     private int itemCount;
+    private Timestamp createdAt;
     private ProductCategory category;
     private String location;
     private String imageUrl;
+    private int categoryId;
+    private int memberId;
 
     public Product() {
         super();
@@ -19,9 +26,11 @@ public class Product extends Model<Product> {
         this.primaryKey = "id";
     }
 
-    public Product(String name, String description, double price, int itemCount, ProductCategory category, String location, String imageUrl) {
+    public Product(String name, Member member, String description, double price, int itemCount, ProductCategory category, String location, String imageUrl) {
         this();
         this.name = name;
+        this.member = member;
+        this.memberId = member.getId();
         this.description = description;
         this.price = price;
         this.itemCount = itemCount;
@@ -40,11 +49,18 @@ public class Product extends Model<Product> {
             product.setPrice(rs.getDouble("price"));
             product.setItemCount(rs.getInt("itemCount"));
             product.setImageUrl(rs.getString("imageUrl"));
-
+            product.setCreatedAt(rs.getTimestamp("createdAt"));
             ProductCategory categoryModel = new ProductCategory();
             int categoryId = rs.getInt("categoryId");
             ProductCategory category = categoryModel.find(String.valueOf(categoryId));
             product.setCategory(category);
+
+            int memberId = rs.getInt("memberId");
+            product.setMemberId(memberId);
+
+            Member memberModel = new Member();
+            Member member = memberModel.find(String.valueOf(memberId));
+            product.setMember(member);
 
             return product;
         } catch (SQLException e) {
@@ -61,6 +77,12 @@ public class Product extends Model<Product> {
         return name;
     }
 
+
+
+    public Member getMember() { return member; }
+
+    public int getMemberId() { return memberId; }
+
     public String getDescription() {
         return description;
     }
@@ -71,6 +93,9 @@ public class Product extends Model<Product> {
 
     public int getItemCount() {
         return itemCount;
+    }
+    public int getCategoryId() {
+        return categoryId;
     }
 
     public ProductCategory getCategory() {
@@ -84,6 +109,13 @@ public class Product extends Model<Product> {
     public String getImageUrl() {
         return imageUrl;
     }
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -92,6 +124,11 @@ public class Product extends Model<Product> {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    public void setMember(Member member) { this.member = member; }
+
+    public void setMemberId(int memberId) { this.memberId = memberId; }
 
     public void setDescription(String description) {
         this.description = description;
@@ -113,7 +150,19 @@ public class Product extends Model<Product> {
         this.location = location;
     }
 
+    public void setCategoryId(int category) {
+        this.categoryId = category;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public ArrayList<Product> findByProductId(int id) {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(id);
+        return this.queryWithParams(sql, params);
+    }
+
 }

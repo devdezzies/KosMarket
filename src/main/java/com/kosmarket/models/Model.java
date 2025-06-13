@@ -28,7 +28,7 @@ public abstract class Model<E> {
         String password = "";
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             con = DriverManager.getConnection( "jdbc:mysql://localhost:3306/" + dbName, username, password);
             stmt = con.createStatement();
@@ -64,8 +64,10 @@ public abstract class Model<E> {
                 }
 
                 Object value = field.get(this);
+
                 if (value != null) {
                     cols += fieldName + ", ";
+
                     if (value instanceof java.util.Date) {
                         values += "'" + new java.sql.Timestamp(((java.util.Date) value).getTime()) + "', ";
                     } else {
@@ -78,11 +80,16 @@ public abstract class Model<E> {
                 cols = cols.substring(0, cols.length() - 2);
                 values = values.substring(0, values.length() - 2);
                 String query = "INSERT INTO " + table + " (" + cols + ") VALUES (" + values + ")";
+
                 int result = stmt.executeUpdate(query);
+                System.out.println(result);
                 message = "info insert: " + result + " rows affected";
+
+
             }
-        } catch (IllegalAccessException | IllegalArgumentException | SecurityException | SQLException e) {
+        } catch (Exception e) {
             message = e.getMessage();
+            System.out.println(e.getMessage());
         } finally {
             disconnect();
         }

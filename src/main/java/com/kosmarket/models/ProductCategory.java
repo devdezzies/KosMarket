@@ -3,6 +3,8 @@ package com.kosmarket.models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.*;
+import java.util.List;
 
 public class ProductCategory extends Model<ProductCategory> {
     private int id;
@@ -99,5 +101,25 @@ public class ProductCategory extends Model<ProductCategory> {
         ArrayList<Object> params = new ArrayList<>();
         params.add("%" + name + "%");
         return this.queryWithParams(sql, params);
+      
+    public static List<ProductCategory> getAll() {
+        List<ProductCategory> categories = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kosmarket", "root", "");
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM productCategory")) {
+
+            while (rs.next()) {
+                ProductCategory category = new ProductCategory();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                categories.add(category);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
 }
