@@ -2,6 +2,7 @@ package com.kosmarket.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ProductCategory extends Model<ProductCategory> {
     private int id;
@@ -34,7 +35,7 @@ public class ProductCategory extends Model<ProductCategory> {
             return null;
         }
     }
-
+    
     @Override
     public String toString() {
         return this.name;
@@ -62,5 +63,41 @@ public class ProductCategory extends Model<ProductCategory> {
 
     public String getDescription() {
         return description;
+    }
+
+    public void save() {
+        if (this.id == 0) {
+            this.insert();
+        } else {
+            this.update();
+        }
+    }
+
+    public static boolean addCategory(String name, String description) {
+        ProductCategory cat = new ProductCategory();
+        cat.setName(name);
+        cat.setDescription(description);
+        cat.save();
+        return cat.getMessage() != null && cat.getMessage().contains("rows affected");
+    }
+    
+    public boolean deleteById(int id) {
+        this.setId(id);
+        this.delete();
+        return getMessage() != null && getMessage().contains("rows affected");
+    }
+
+    public ArrayList<ProductCategory> findById(int id) {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(id);
+        return this.queryWithParams(sql, params);
+    }
+
+    public ArrayList<ProductCategory> findByName(String name) {
+        String sql = "SELECT * FROM " + this.table + " WHERE name LIKE ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        return this.queryWithParams(sql, params);
     }
 }

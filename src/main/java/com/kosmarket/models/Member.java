@@ -61,6 +61,10 @@ public class Member extends Model<Member> {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -174,4 +178,20 @@ public class Member extends Model<Member> {
         params.add(username);
         return this.queryWithParams(sql, params);
     }
+
+    public ArrayList<Member> findById(int id) {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(id);
+        return this.queryWithParams(sql, params);
+    }
+
+    public ArrayList<Member> findByName(String name) {
+        String sql = "SELECT * FROM " + this.table + " WHERE firstName LIKE ? OR lastName LIKE ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        params.add("%" + name + "%");
+        return this.queryWithParams(sql, params);
+    }
+    
 }
