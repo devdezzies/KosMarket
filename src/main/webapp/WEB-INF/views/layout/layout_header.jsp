@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>KosMarket</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
     <%@ include file="/WEB-INF/includes/header.jsp" %>
 </head>
 <body class="bg-white min-h-screen">
