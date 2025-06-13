@@ -21,6 +21,7 @@
 	String categoryName = product.getCategory() != null ? product.getCategory().getName() : "Uncategorized";
 %>
 
+
 <%
 	Member member = (Member) session.getAttribute("member");
 	boolean isBookmarked = false;
@@ -28,6 +29,7 @@
 		isBookmarked = new Bookmark().isBookmarked(member.getId(), product.getId());
 	}
 %>
+
 
 <div class="bg-gray-50 min-h-screen py-6">
 	<div class="container mx-auto px-4 max-w-6xl">
@@ -64,9 +66,22 @@
 					<!-- Seller Info -->
 					<div class="mb-4 flex items-center">
 						<span class="text-sm text-gray-500">Dijual oleh</span>
-						<span class="text-blue-600 font-semibold ml-2">
-							<%= product.getMember() != null ? product.getMember().getFirstName() : "Tidak diketahui" %>
-						</span>
+
+						<%
+							String sellerName = product.getMember() != null ? product.getMember().getFirstName() : "Tidak diketahui";
+							int sellerId = product.getMember() != null ? product.getMember().getId() : -1;
+						%>
+
+						<% if (product.getMember() != null) { %>
+						<a href="public-profile?id=<%= sellerId %>" class="text-blue-600 font-semibold ml-2 hover:underline">
+							<%= sellerName %>
+						</a>
+						<% } else { %>
+						<span class="text-blue-600 font-semibold ml-2">Tidak diketahui</span>
+						<% } %>
+
+
+
 						<div class="ml-2 w-2 h-2 bg-green-400 rounded-full"></div>
 					</div>
 
@@ -89,6 +104,7 @@
                                 </span>
 							<% } %>
 							<!-- Bookmark Icon -->
+
 							<button id="bookmarkBtn"
 									class="p-2 rounded-full transition cursor-pointer
         							<%= isBookmarked ? "bg-blue-500 text-white" : "border border-blue-500 text-blue-500" %>"
@@ -135,6 +151,7 @@
 											});
 								}
 							</script>
+
 						</div>
 					</div>
 
@@ -199,4 +216,5 @@
 	</div>
 </div>
 
-<%@ include file="/WEB-INF/views/layout/layout_footer.jsp" %>
+<%@ include file="/WEB-INF/views/layout/layout_footer.jsp"%>
+

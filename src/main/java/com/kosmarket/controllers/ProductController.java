@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @WebServlet(name = "ProductControllerServlet", urlPatterns = "/product")
+
 @MultipartConfig( // ← ini WAJIB ADA untuk handle upload file
         fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
         maxFileSize = 1024 * 1024 * 10,       // 10MB
@@ -22,6 +23,7 @@ public class ProductController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("doGet");
+
 
         String menu = request.getParameter("menu");
         String idParam = request.getParameter("id");
@@ -43,6 +45,7 @@ public class ProductController extends HttpServlet {
                 System.out.println("[ERROR] Invalid product ID format: " + idParam);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID");
             }
+
         } else if ("product_post".equals(menu)) {
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("isLoggedIn") == null || session.getAttribute("member") == null) {
@@ -56,12 +59,14 @@ public class ProductController extends HttpServlet {
             List<ProductCategory> categories = ProductCategory.getAll();
             request.setAttribute("categories", categories);
             request.getRequestDispatcher("/WEB-INF/views/postProduct.jsp").forward(request, response);
+
         } else {
             List<Product> products = productModel.get();
             request.setAttribute("products", products);
             request.getRequestDispatcher("/WEB-INF/views/products/index.jsp").forward(request, response);
         }
     }
+
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -90,6 +95,7 @@ public class ProductController extends HttpServlet {
 
             String filePath = uploadPath + File.separator + fileName;
             filePart.write(filePath); // simpan file ke server
+
 
             String imageUrl = "https://images.unsplash.com/photo-1743844915361-13c93d59c965?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" + fileName; // url relatif, bisa diakses dari JSP
 

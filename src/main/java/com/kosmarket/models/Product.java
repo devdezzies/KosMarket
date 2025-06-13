@@ -78,7 +78,6 @@ public class Product extends Model<Product> {
     }
 
 
-
     public Member getMember() { return member; }
 
     public int getMemberId() { return memberId; }
@@ -158,11 +157,11 @@ public class Product extends Model<Product> {
         this.imageUrl = imageUrl;
     }
 
+
     public ArrayList<Product> findByProductId(int id) {
         String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
         ArrayList<Object> params = new ArrayList<>();
         params.add(id);
         return this.queryWithParams(sql, params);
     }
-
 }
