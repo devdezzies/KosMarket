@@ -103,7 +103,10 @@ public abstract class Model<E> {
                 }
 
                 if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) ||
-                        fieldName.equals("address") || fieldName.equals("bookmark") || fieldName.equals("postedProducts")) {
+                    fieldName.equals("address") ||
+                    fieldName.equals("bookmark") ||
+                    fieldName.equals("postedProducts") ||
+                    fieldName.equals("category")) {
                     continue;
                 }
 
@@ -134,6 +137,7 @@ public abstract class Model<E> {
         try {
             connect();
             Object pkValue = 0;
+            System.out.println("Deleting from table: " + table);
             for (Field field : this.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (field.getName().equals(primaryKey)) {
@@ -141,6 +145,7 @@ public abstract class Model<E> {
                     break;
                 }
             }
+            System.out.println("UPDATE QUERY: " + "DELETE FROM " + table + " WHERE " + primaryKey + " = '" + pkValue +"'");
             int result = stmt.executeUpdate("DELETE FROM " + table + " WHERE " + primaryKey + " = '" + pkValue +"'");
             message = "info delete: " + result + " rows affected";
         } catch (IllegalAccessException | IllegalArgumentException | SecurityException | SQLException e) {

@@ -13,6 +13,7 @@ public class Member extends Model<Member> {
     private String username;
     private String hashedPassword;
     private String profilePicture;
+    private int addressId;
     private Address address;
     private Date createdAt;
     private Bookmark bookmark;
@@ -26,7 +27,7 @@ public class Member extends Model<Member> {
 
     // constructor with all fields
     public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
-                 String profilePicture, Address address, Date createdAt, Bookmark bookmark) {
+                 String profilePicture, int addressId, Address address, Date createdAt, Bookmark bookmark) {
         this.table = "member";
         this.primaryKey = "id";
         this.id = id;
@@ -36,6 +37,7 @@ public class Member extends Model<Member> {
         this.username = username;
         this.hashedPassword = hashedPassword;
         this.profilePicture = profilePicture;
+        this.addressId = addressId;
         this.address = address;
         this.createdAt = createdAt;
         this.bookmark = bookmark;
@@ -52,6 +54,7 @@ public class Member extends Model<Member> {
             member.setEmail(rs.getString("email"));
             member.setUsername(rs.getString("username"));
             member.setHashedPassword(rs.getString("hashedPassword"));
+            member.setAddressId(rs.getInt("addressId"));
             member.setCreatedAt(rs.getDate("createdAt"));
             member.setProfilePicture(rs.getString("profilePicture"));
             return member;
@@ -59,6 +62,10 @@ public class Member extends Model<Member> {
             System.out.println(E.getMessage());
             return null;
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -79,6 +86,10 @@ public class Member extends Model<Member> {
 
     public String getHashedPassword() {
         return hashedPassword;
+    }
+
+    public int getAddressId() {
+        return addressId;
     }
 
     public Address getAddress() {
@@ -140,6 +151,10 @@ public class Member extends Model<Member> {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
     }
 
     public void setAddress(Address address) {
