@@ -61,6 +61,10 @@ public class Member extends Model<Member> {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
