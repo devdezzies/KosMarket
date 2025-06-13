@@ -2,6 +2,8 @@ package com.kosmarket.controllers;
 
 import com.kosmarket.models.Product;
 import com.kosmarket.models.ProductCategory;
+import com.kosmarket.models.Bookmark;
+import com.kosmarket.models.Member;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,6 +25,9 @@ public class HomeController extends HttpServlet {
         String minPrice = request.getParameter("min-price");
         String maxPrice = request.getParameter("max-price");
         String search = request.getParameter("search");
+        String onlyBookmarked = request.getParameter("only-bookmarked");
+        Member member = (Member) request.getSession().getAttribute("member");
+        boolean filterBookmark = "on".equals(request.getParameter("only-bookmarked")) && member != null;
 
         List<String> conditions = new ArrayList<>();
 
@@ -42,6 +47,26 @@ public class HomeController extends HttpServlet {
             conditions.add("name LIKE '%" + search + "%'");
         }
 
+        // bookmark filter
+        if (filterBookmark) {
+            int memberId = member.getId();
+            Bookmark bookmarkModel = new Bookmark();
+            bookmarkModel.where("memberId = " + memberId);
+            List<Bookmark> bookmarkList = bookmarkModel.get();
+
+            List<String> bookmarkedProductIds = new ArrayList<>();
+            for (Bookmark b : bookmarkList) {
+                bookmarkedProductIds.add(String.valueOf(b.getProductId()));
+            }
+
+            if (!bookmarkedProductIds.isEmpty()) {
+                conditions.add("id IN (" + String.join(",", bookmarkedProductIds) + ")");
+            } else {
+                // Kalau user ga punya bookmark, langsung kasih query yang hasilnya kosong
+                conditions.add("1 = 0");
+            }
+        }
+
         if (!conditions.isEmpty()) {
             productModel.where(String.join(" AND ", conditions));
         }
@@ -51,6 +76,7 @@ public class HomeController extends HttpServlet {
         request.setAttribute("minPrice", minPrice);
         request.setAttribute("maxPrice", maxPrice);
         request.setAttribute("search", search);
+        request.setAttribute("onlyBookmarked", filterBookmark);
 
         List<Product> products = productModel.get();
         request.setAttribute("products", products);
@@ -71,4 +97,4 @@ public class HomeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
-} 
+}
