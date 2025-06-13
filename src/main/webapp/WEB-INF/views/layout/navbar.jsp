@@ -35,8 +35,8 @@
                 <form action="/home" method="GET">
                     <% if (selectedCategories != null) {
                         for (String categoryId : selectedCategories) { %>
-                            <input type="hidden" name="category" value="<%= categoryId %>">
-                        <% }
+                    <input type="hidden" name="category" value="<%= categoryId %>">
+                    <% }
                     } %>
                     <input type="hidden" name="min-price" value="<%= minPrice != null ? minPrice : "" %>">
                     <input type="hidden" name="max-price" value="<%= maxPrice != null ? maxPrice : "" %>">
@@ -54,6 +54,13 @@
             </div>
 
             <!-- desktop icons -->
+            <!-- post product button -->
+            <a href="product?menu=product_post" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="font-medium">Post Product</span>
+            </a>
             <!-- tag icon -->
             <a href="${pageContext.request.contextPath}/order" class="text-gray-600 hover:text-blue-500">
                 <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -122,6 +129,13 @@
 
         <!-- mobile icons -->
         <div class="flex flex-col space-y-2">
+            <!-- post product button for mobile -->
+            <a href="product?menu=product_post" class="flex items-center p-3 rounded bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200">
+                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="ml-3 font-medium">Post Product</span>
+            </a>
             <a href="${pageContext.request.contextPath}/order" class="flex items-center p-2 rounded hover:bg-gray-100">
                 <svg class="h-7 w-7 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
@@ -168,4 +182,4 @@
             });
         });
     </script>
-</nav> 
+</nav>

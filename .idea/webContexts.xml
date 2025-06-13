@@ -7,7 +7,10 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/authentication.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/product.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
+
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/publicprofil.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
+
+
       </map>
     </option>
   </component>

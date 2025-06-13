@@ -26,7 +26,9 @@ public class Member extends Model<Member> {
 
     // constructor with all fields
     public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
+
                   String profilePicture, Address address, Date createdAt) {
+
         this.table = "member";
         this.primaryKey = "id";
         this.id = id;
@@ -68,6 +70,7 @@ public class Member extends Model<Member> {
             return null;
         }
     }
+
 
     public int getId() { return id; }
 
