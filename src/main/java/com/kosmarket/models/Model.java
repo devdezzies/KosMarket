@@ -145,7 +145,6 @@ public abstract class Model<E> {
                     break;
                 }
             }
-            System.out.println("UPDATE QUERY: " + "DELETE FROM " + table + " WHERE " + primaryKey + " = '" + pkValue +"'");
             int result = stmt.executeUpdate("DELETE FROM " + table + " WHERE " + primaryKey + " = '" + pkValue +"'");
             message = "info delete: " + result + " rows affected";
         } catch (IllegalAccessException | IllegalArgumentException | SecurityException | SQLException e) {
