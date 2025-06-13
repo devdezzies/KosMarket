@@ -1,14 +1,11 @@
 package com.kosmarket.controllers;
-
 import com.kosmarket.models.Member;
 import com.kosmarket.models.Product;
-
 import com.kosmarket.models.ProductCategory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -25,6 +22,7 @@ public class ProductController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("doGet");
+
         String menu = request.getParameter("menu");
         String idParam = request.getParameter("id");
 
@@ -64,6 +62,7 @@ public class ProductController extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/products/index.jsp").forward(request, response);
         }
     }
+
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("doPost");

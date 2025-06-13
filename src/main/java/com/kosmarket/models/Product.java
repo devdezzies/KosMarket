@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 public class Product extends Model<Product> {
     private int id;
     private String name;
+    private Member member;
+    private int memberId;
     private String description;
     private double price;
     private int itemCount;
@@ -24,9 +26,11 @@ public class Product extends Model<Product> {
         this.primaryKey = "id";
     }
 
-    public Product(String name, String description, double price, int itemCount, ProductCategory category, String location, String imageUrl) {
+    public Product(String name, Member member, String description, double price, int itemCount, ProductCategory category, String location, String imageUrl) {
         this();
         this.name = name;
+        this.member = member;
+        this.memberId = member.getId();
         this.description = description;
         this.price = price;
         this.itemCount = itemCount;
@@ -51,6 +55,13 @@ public class Product extends Model<Product> {
             ProductCategory category = categoryModel.find(String.valueOf(categoryId));
             product.setCategory(category);
 
+            int memberId = rs.getInt("memberId");
+            product.setMemberId(memberId);
+
+            Member memberModel = new Member();
+            Member member = memberModel.find(String.valueOf(memberId));
+            product.setMember(member);
+
             return product;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,9 +76,13 @@ public class Product extends Model<Product> {
     public String getName() {
         return name;
     }
-    public int getMemberId() {
-        return memberId;
-    }
+
+
+
+    public Member getMember() { return member; }
+
+    public int getMemberId() { return memberId; }
+
     public String getDescription() {
         return description;
     }
@@ -110,9 +125,11 @@ public class Product extends Model<Product> {
         this.name = name;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
-    }
+
+    public void setMember(Member member) { this.member = member; }
+
+    public void setMemberId(int memberId) { this.memberId = memberId; }
+
     public void setDescription(String description) {
         this.description = description;
     }
