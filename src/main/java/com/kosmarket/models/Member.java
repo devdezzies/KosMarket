@@ -14,8 +14,8 @@ public class Member extends Model<Member> {
     private String hashedPassword;
     private String profilePicture;
     private Address address;
+    private int addressId;
     private Date createdAt;
-    private Bookmark bookmark;
     private ArrayList<Product> postedProducts;
 
     // registration
@@ -26,7 +26,7 @@ public class Member extends Model<Member> {
 
     // constructor with all fields
     public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
-                 String profilePicture, Address address, Date createdAt, Bookmark bookmark) {
+                  String profilePicture, Address address, Date createdAt) {
         this.table = "member";
         this.primaryKey = "id";
         this.id = id;
@@ -37,8 +37,8 @@ public class Member extends Model<Member> {
         this.hashedPassword = hashedPassword;
         this.profilePicture = profilePicture;
         this.address = address;
+        this.addressId = address.getId();
         this.createdAt = createdAt;
-        this.bookmark = bookmark;
         this.postedProducts = new ArrayList<>();
     }
 
@@ -54,12 +54,22 @@ public class Member extends Model<Member> {
             member.setHashedPassword(rs.getString("hashedPassword"));
             member.setCreatedAt(rs.getDate("createdAt"));
             member.setProfilePicture(rs.getString("profilePicture"));
+
+            int addressId = rs.getInt("addressId");
+            member.setAddressId(rs.getInt("addressId"));
+
+            Address addressModel = new Address();
+            Address address = addressModel.find(String.valueOf(addressId));
+            member.setAddress(address);
+
             return member;
         } catch (SQLException E) {
             System.out.println(E.getMessage());
             return null;
         }
     }
+
+    public int getId() { return id; }
 
     public String getFirstName() {
         return firstName;
@@ -85,12 +95,10 @@ public class Member extends Model<Member> {
         return address;
     }
 
+    public int getAddressId() { return addressId; }
+
     public Date getCreatedAt() {
         return createdAt;
-    }
-
-    public Bookmark getBookmark() {
-        return bookmark;
     }
 
     public String getProfilePicture() {
@@ -99,23 +107,6 @@ public class Member extends Model<Member> {
 
     public ArrayList<Product> getPostedProducts() {
         return postedProducts;
-    }
-
-    public void addItemToBookmark(Product product) {
-        if (bookmark == null) {
-            bookmark = new Bookmark();
-        }
-        bookmark.addItem(product);
-    }
-
-    public void removeItemFromBookmark(Product product) {
-        if (bookmark != null) {
-            bookmark.removeItem(product);
-        }
-    }
-
-    public void setBookmark(Bookmark bookmark) {
-        this.bookmark = bookmark;
     }
 
     public void setProfilePicture(String profilePicture) {
@@ -145,6 +136,8 @@ public class Member extends Model<Member> {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public void setAddressId(int addressId) { this.addressId = addressId; }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;

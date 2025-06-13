@@ -84,4 +84,4 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/views/layout/layout_footer.jsp" %> 
+<%@ include file="/WEB-INF/views/layout/layout_footer.jsp" %>
