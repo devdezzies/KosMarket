@@ -80,9 +80,10 @@
 						<span class="text-blue-600 font-semibold ml-2">Tidak diketahui</span>
 						<% } %>
 
-
-
-						<div class="ml-2 w-2 h-2 bg-green-400 rounded-full"></div>
+						<div class="px-2 py-2 relative inline-flex items-center justify-center">
+							<div class="rounded-full bg-green-400 h-[8px] w-[8px] inline-block mr-2"></div>
+							<div class="absolute animate-ping rounded-full bg-green-400 h-[8px] w-[8px] mr-2"></div>
+						</div>
 					</div>
 
 					<h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">

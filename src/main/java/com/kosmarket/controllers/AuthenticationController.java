@@ -86,6 +86,7 @@ public class AuthenticationController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
 
+
         try {
             // validate input
             if (firstName == null || firstName.trim().isEmpty() ||
