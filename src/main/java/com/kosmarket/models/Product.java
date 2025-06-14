@@ -2,8 +2,8 @@ package com.kosmarket.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class Product extends Model<Product> {
     private int id;
@@ -18,8 +18,7 @@ public class Product extends Model<Product> {
     private String location;
     private String imageUrl;
     private int categoryId;
-    private int memberId;
-
+    
     public Product() {
         super();
         this.table = "product";
@@ -77,8 +76,6 @@ public class Product extends Model<Product> {
         return name;
     }
 
-
-
     public Member getMember() { return member; }
 
     public int getMemberId() { return memberId; }
@@ -125,7 +122,6 @@ public class Product extends Model<Product> {
         this.name = name;
     }
 
-
     public void setMember(Member member) { this.member = member; }
 
     public void setMemberId(int memberId) { this.memberId = memberId; }
@@ -158,11 +154,17 @@ public class Product extends Model<Product> {
         this.imageUrl = imageUrl;
     }
 
-    public ArrayList<Product> findByProductId(int id) {
+    public ArrayList<Product> findProductByName(String name) {
+        String sql = "SELECT * FROM " + this.table + " WHERE name LIKE ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        return this.queryWithParams(sql, params);
+    }
+
+    public ArrayList<Product> findProductById(int id) {
         String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
         ArrayList<Object> params = new ArrayList<>();
         params.add(id);
         return this.queryWithParams(sql, params);
     }
-
 }

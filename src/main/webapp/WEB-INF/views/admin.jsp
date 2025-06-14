@@ -1,4 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.kosmarket.models.ProductCategory" %>
+<%@ page import="com.kosmarket.models.Product" %>
+<%@ page import="com.kosmarket.models.Member" %>
 
 <html>
 <head>
@@ -11,15 +15,20 @@
 <body class="min-h-screen font-[Quicksand] flex flex-col overflow-hidden px-4 md:px-6">
     <!-- Header -->
     <header class="bg-white px-4 md:px-6 py-4 flex justify-between items-center">
-        <h1 class="text-lg md:text-xl font-semibold text-gray-800">KosMarket</h1>
         <div class="flex items-center space-x-2">
             <!-- Mobile menu toggle -->
             <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
                 <i class="fas fa-bars text-xl"></i>
             </button>
-            <span class="text-sm text-gray-600">Welcome, Admin</span>
+            <h1 class="text-lg md:text-xl font-semibold ml-2">
+                <span class="text-gray-800 font-bold">KosMarket</span> 
+                <span class="text-indigo-600">Admin</span>
+            </h1>
+        </div>
+        <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-600 font-bold mr-4">Welcome, Admin</span>
             <a href="${pageContext.request.contextPath}/authentication?action=logout" 
-               class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+            class="px-4 py-2 bg-red-600 text-white rounded-2xl hover:bg-red-700 transition">
                 <i class="fas fa-sign-out-alt mr-2"></i>Logout
             </a>
         </div>
@@ -41,7 +50,7 @@
                 </div>
 
                 <div class="mt-4 md:mt-8">
-                    <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-6">Admin Control</h3>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-6">Admin Control</h3>
                 </div>
 
                 <!-- Navigation Tabs -->
@@ -66,7 +75,7 @@
 
                 <!-- Overview Section -->
                 <div class="mt-4 md:mt-8">
-                    <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-6">Overview</h3>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-6">Overview</h3>
                 </div>      
 
                 <div class="bg-gray-100 p-4 rounded-2xl mb-6">
@@ -87,29 +96,54 @@
                                     <span class="text-xs font-medium text-gray-700">Database Status</span>
                                 </div>
                             </div>
-                            <% if (request.getAttribute("dbConnection") != null && (Boolean)request.getAttribute("dbConnection")) { %>
+                            <% 
+                                Object dbConnectionObj = request.getAttribute("dbConnection");
+                                boolean isConnected = dbConnectionObj != null && dbConnectionObj instanceof Boolean && ((Boolean) dbConnectionObj).booleanValue();
+                                if (isConnected) { 
+                            %>
                                 <span class="text-sm font-bold text-green-600">Online</span>
                             <% } else { %>
                                 <span class="text-sm font-bold text-red-600">Offline</span>
                             <% } %>
                         </div>
+                        <!-- User Count -->
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div>
+                                    <span class="text-xs font-medium text-gray-700">Total Users</span>
+                                </div>
+                            </div>
+                            <%
+                                java.util.List<Member> members = (java.util.List<Member>) request.getAttribute("members");
+                                int userCount = (members != null) ? members.size() : 0;
+                            %>
+                            <span class="text-sm font-bold text-indigo-800"><%= userCount %></span> 
+                        </div>
                         <!-- Product Count -->
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
                                 <div>
-                                    <span class="text-xs font-medium text-gray-700">Database Server</span>
+                                    <span class="text-xs font-medium text-gray-700">Total Products</span>
                                 </div>
                             </div>
-                            <span class="text-sm font-bold text-gray-800">99%</span>
+                            <%
+                                java.util.List<Product> products = (java.util.List<Product>) request.getAttribute("products");
+                                int productCount = (products != null) ? products.size() : 0;
+                            %>
+                            <span class="text-sm font-bold text-indigo-800"><%= productCount %></span>
                         </div>
                         <!-- Category Count -->
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
                                 <div>
-                                    <span class="text-xs font-medium text-gray-700">Database Server</span>
+                                    <span class="text-xs font-medium text-gray-700">Total Categories</span>
                                 </div>
                             </div>
-                            <span class="text-sm font-bold text-gray-800">99%</span>
+                            <%
+                                java.util.List<ProductCategory> categories = (java.util.List<ProductCategory>) request.getAttribute("categories");
+                                int categoryCount = (categories != null) ? categories.size() : 0;
+                            %>
+                            <span class="text-sm font-bold text-indigo-800"><%= categoryCount %></span>
                         </div>
 
                     </div>

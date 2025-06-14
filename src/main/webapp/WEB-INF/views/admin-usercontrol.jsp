@@ -69,10 +69,25 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <!-- Member Avatar -->
-                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-gray-600 text-lg"></i>
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+                                <%
+                                    String profilePic = member.getProfilePicture();
+                                    if (profilePic != null && !profilePic.trim().isEmpty()) {
+                                %>
+                                    <img src="<%= profilePic %>" 
+                                         alt="Profile Picture" 
+                                         class="w-12 h-12 object-cover rounded-full"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <i class="fas fa-user text-gray-600 text-lg" style="display: none;"></i>
+                                <%
+                                    } else {
+                                %>
+                                    <i class="fas fa-user text-gray-600 text-lg"></i>
+                                <%
+                                    }
+                                %>
                             </div>
-                            
+                                                    
                             <!-- Member Info -->
                             <div class="member-info">
                                 <h3 class="font-semibold text-gray-800">
@@ -87,13 +102,13 @@
                     <!-- Action Buttons -->
                     <div class="flex justify-end space-x-2 p-1 mt-3">
                         <button onclick="showUserDetailModal('<%= member.getId() %>', '<%= member.getFirstName() %>', '<%= member.getLastName() %>', '<%= member.getUsername() %>', '<%= member.getEmail() %>')" 
-                                class="px-3 py-2 bg-indigo-500 text-white text-sm rounded-2xl hover:bg-indigo-600 transition">
+                                class="px-3 py-2 bg-indigo-600 text-white text-sm rounded-2xl hover:bg-indigo-700 transition">
                             <i class="fas fa-eye mr-1"></i>View
                         </button>
-                        <button onclick="editUserDetailModal('<%= member.getId() %>', '<%= member.getFirstName() %>', '<%= member.getLastName() %>', '<%= member.getUsername() %>', '<%= member.getEmail() %>')" 
+                        <%-- <button onclick="editUserDetailModal('<%= member.getId() %>', '<%= member.getFirstName() %>', '<%= member.getLastName() %>', '<%= member.getUsername() %>', '<%= member.getEmail() %>')" 
                                 class="px-3 py-2 bg-yellow-500 text-white text-sm rounded-2xl hover:bg-yellow-600 transition">
                             <i class="fas fa-edit mr-1"></i>Edit
-                        </button>
+                        </button> --%>
                         <button onclick="deleteMember('<%= member.getId() %>', '<%= member.getFirstName() %> <%= member.getLastName() %>')" 
                                 class="px-3 py-2 bg-red-600 text-white text-sm rounded-2xl hover:bg-red-700 transition">
                             <i class="fas fa-trash mr-1"></i>Delete
@@ -140,7 +155,7 @@
 <script>
 let currentUserId = null;
 let currentUserName = null;
-let isEditMode = false;
+//let isEditMode = false;
 let searchResultIds = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -361,9 +376,24 @@ function clearSearch() {
 function showUserDetailModal(userId, firstName, lastName, username, email) {
     currentUserId = userId;
     currentUserName = firstName + ' ' + lastName;
-    isEditMode = false;
-    
+    //isEditMode = false;
+
+    // Ambil profilePic dari card (jika ada)
+    let profilePic = '';
+    const card = document.querySelector(`.member-card[data-member-id="${userId}"]`);
+    if (card) {
+        const img = card.querySelector('img');
+        if (img && img.src) profilePic = img.src;
+    }
+
     document.getElementById('user-detail-content').innerHTML = 
+        '<div class="flex flex-col items-center mb-4">' +
+            (profilePic
+                ? `<img src="${profilePic}" alt="Profile Picture" class="w-20 h-20 rounded-full object-cover mb-2" onerror="this.style.display='none';">`
+                : `<div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-user text-gray-600 text-3xl"></i>
+                   </div>`) +
+        '</div>' +
         '<h3 class="text-lg font-semibold text-gray-800 mb-1">' + 
         firstName + ' ' + lastName + 
         '</h3>' +
@@ -382,27 +412,43 @@ function showUserDetailModal(userId, firstName, lastName, username, email) {
                 '<span class="text-gray-800 text-sm font-medium">2024-01-15</span>' +
             '</div>' +
         '</div>';
-    
+
     document.getElementById('modal-buttons').innerHTML = 
-        '<button onclick="editUserDetailModal(\'' + userId + '\', \'' + firstName + '\', \'' + lastName + '\', \'' + username + '\', \'' + email + '\')" ' +
+        /*'<button onclick="editUserDetailModal(\'' + userId + '\', \'' + firstName + '\', \'' + lastName + '\', \'' + username + '\', \'' + email + '\')" ' +
         'class="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-2xl hover:bg-orange-600 transition font-medium">' +
             '<i class="fas fa-edit mr-2"></i>Edit User' +
-        '</button>' +
+        '</button>' +*/
         '<button onclick="deleteMemberFromModal()" ' +
         'class="flex-1 px-4 py-2 bg-red-600 text-white rounded-2xl hover:bg-red-700 transition font-medium">' +
             '<i class="fas fa-trash mr-2"></i>Delete User' +
         '</button>';
-    
+
     document.getElementById('user-detail-modal').classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
 }
 
+/*
 function editUserDetailModal(userId, firstName, lastName, username, email) {
     currentUserId = userId;
     currentUserName = firstName + ' ' + lastName;
     isEditMode = true;
 
+    // Ambil profilePic dari card (jika ada)
+    let profilePic = '';
+    const card = document.querySelector(`.member-card[data-member-id="${userId}"]`);
+    if (card) {
+        const img = card.querySelector('img');
+        if (img && img.src) profilePic = img.src;
+    }
+
     document.getElementById('user-detail-content').innerHTML = 
+        '<div class="flex flex-col items-center mb-4">' +
+            (profilePic
+                ? `<img src="${profilePic}" alt="Profile Picture" class="w-20 h-20 rounded-full object-cover mb-2" onerror="this.style.display='none';">`
+                : `<div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-user text-gray-600 text-3xl"></i>
+                   </div>`) +
+        '</div>' +
         '<h3 class="text-lg font-semibold text-gray-800 mb-1">Edit User</h3>' +
         '<p class="text-sm text-gray-600 mb-4">ID : ' + userId + '</p>' +
         '<form id="edit-user-form" class="text-left space-y-4">' +
@@ -441,7 +487,8 @@ function editUserDetailModal(userId, firstName, lastName, username, email) {
     document.getElementById('user-detail-modal').classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
 }
-
+*/
+/*
 function saveUserChanges() {
     const newFirstName = document.getElementById('edit-firstname').value;
     const newLastName = document.getElementById('edit-lastname').value;
@@ -484,7 +531,7 @@ function saveUserChanges() {
         form.submit();
     }
 }
-
+*/
 function deleteMember(userId, userName) {
     if (confirm(`Are you sure you want to delete member "${userName}"?`)) {
         const form = document.createElement('form');
@@ -520,6 +567,6 @@ function hideUserDetailModal() {
     document.body.classList.remove('overflow-hidden');
     currentUserId = null;
     currentUserName = null;
-    isEditMode = false;
+    /*isEditMode = false;*/
 }
 </script>

@@ -1,9 +1,11 @@
 package com.kosmarket.models;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.sql.*;
 import java.util.List;
 
 public class ProductCategory extends Model<ProductCategory> {
@@ -101,7 +103,8 @@ public class ProductCategory extends Model<ProductCategory> {
         ArrayList<Object> params = new ArrayList<>();
         params.add("%" + name + "%");
         return this.queryWithParams(sql, params);
-      
+    }
+    
     public static List<ProductCategory> getAll() {
         List<ProductCategory> categories = new ArrayList<>();
 

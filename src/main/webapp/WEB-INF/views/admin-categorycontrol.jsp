@@ -5,14 +5,6 @@
 <div class="p-6">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Category Management</h2>
 
-    <%-- <!-- Add Category Button -->
-    <div class="mb-4">
-        <button onclick="showAddCategoryModal()" 
-                class="px-4 py-2 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition font-medium">
-            <i class="fas fa-plus mr-2"></i>Add New Category
-        </button>
-    </div> --%>
-
     <!-- Search Section -->
     <div class="bg-white mb-4">
         <div class="p-4">
@@ -30,6 +22,11 @@
                 <button type="submit" class="px-8 py-2 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 border-indigo-600 transition-all duration-200 flex items-center justify-center min-w-[100px]">
                     <i class="fas fa-search mr-2"></i>
                     <span>Search</span>
+                </button>
+                <!-- Add Category Button -->
+                <button onclick="showAddCategoryModal()" 
+                        class="px-4 py-2 bg-green-600 text-white rounded-2xl border-green-600 hover:bg-green-700 transition font-medium">
+                    <i class="fas fa-plus mr-2"></i>Add Category
                 </button>
             </form>
         </div>
@@ -94,7 +91,7 @@
                     <!-- Action Buttons -->
                     <div class="flex justify-end space-x-2 p-1 mt-3">
                         <button onclick="showCategoryDetailModal('<%= category.getId() %>', '<%= category.getName() %>', '<%= category.getDescription() %>')" 
-                                class="px-3 py-2 bg-indigo-500 text-white text-sm rounded-2xl hover:bg-indigo-600 transition">
+                                class="px-3 py-2 bg-indigo-600 text-white text-sm rounded-2xl hover:bg-indigo-700 transition">
                             <i class="fas fa-eye mr-1"></i>View
                         </button>
                         <button onclick="editCategoryDetailModal('<%= category.getId() %>', '<%= category.getName() %>', '<%= category.getDescription() %>')" 
@@ -398,6 +395,74 @@ function showCategoryDetailModal(categoryId, categoryName, categoryDescription) 
     
     document.getElementById('category-detail-modal').classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
+}
+function showAddCategoryModal() {
+    currentCategoryId = null;
+    currentCategoryName = null;
+    isEditMode = false;
+    
+    document.getElementById('category-detail-content').innerHTML = 
+        '<h3 class="text-lg font-semibold text-gray-800 mb-1">Add New Category</h3>' +
+        '<p class="text-sm text-gray-600 mb-4">Create a new category</p>' +
+        '<form id="add-category-form" class="text-left space-y-4">' +
+            '<div>' +
+                '<label class="block text-gray-600 text-sm mb-1">Category Name :</label>' +
+                '<input type="text" id="add-categoryname" placeholder="Enter category name" ' +
+                'class="w-full px-3 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500">' +
+            '</div>' +
+            '<div>' +
+                '<label class="block text-gray-600 text-sm mb-1">Description :</label>' +
+                '<textarea id="add-description" placeholder="Enter category description" ' +
+                'class="w-full px-3 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3"></textarea>' +
+            '</div>' +
+        '</form>';
+    
+    document.getElementById('modal-buttons').innerHTML = 
+        '<button onclick="saveNewCategory()" ' +
+        'class="flex-1 px-4 py-2 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition font-medium">' +
+            '<i class="fas fa-plus mr-2"></i>Add Category' +
+        '</button>';
+    
+    document.getElementById('category-detail-modal').classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+}
+
+function saveNewCategory() {
+    const categoryName = document.getElementById('add-categoryname').value;
+    const description = document.getElementById('add-description').value;
+    
+    if (!categoryName.trim() || !description.trim()) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (confirm('Are you sure you want to add this new category?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${pageContext.request.contextPath}/admin';
+        
+        const actionInput = document.createElement('input');
+        actionInput.type = 'hidden';
+        actionInput.name = 'action';
+        actionInput.value = 'addCategory';
+        form.appendChild(actionInput);
+        
+        const inputs = [
+            {name: 'name', value: categoryName},
+            {name: 'description', value: description}
+        ];
+        
+        inputs.forEach(input => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = input.name;
+            hiddenInput.value = input.value;
+            form.appendChild(hiddenInput);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
 }
 
 function editCategoryDetailModal(categoryId, categoryName, categoryDescription) {

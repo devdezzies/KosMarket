@@ -183,6 +183,5 @@ public class Member extends Model<Member> {
         params.add("%" + name + "%");
         params.add("%" + name + "%");
         return this.queryWithParams(sql, params);
-    }
-    
+    }  
 }

@@ -113,7 +113,7 @@ public class Admin extends Model<Admin> {
     }
 
     public boolean deleteProductById(int productId) {
-        Member deleteProduct = new Member();
+        Product deleteProduct = new Product();  
         deleteProduct.setId(productId);
         deleteProduct.delete();
         return deleteProduct.getMessage().contains("rows affected");

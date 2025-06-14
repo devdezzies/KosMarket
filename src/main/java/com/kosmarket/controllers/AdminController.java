@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.kosmarket.models.Admin;
 import com.kosmarket.models.Member;
+import com.kosmarket.models.Product;
 import com.kosmarket.models.ProductCategory;
 
 import jakarta.servlet.ServletException;
@@ -81,12 +82,12 @@ public class AdminController extends HttpServlet {
             case "deleteMember":
                 handleDeleteMember(request, response, admin);
                 break;
-            case "updateMember":
-                handleUpdateMember(request, response, admin);
-                break;
-            // case "deleteProduct":
-            //     handleDeleteProduct(request, response, admin);
+            // case "updateMember":
+            //     handleUpdateMember(request, response, admin);
             //     break;
+            case "deleteProduct":
+                handleDeleteProduct(request, response, admin);
+                break;
             case "searchMemberByID":
                 searchMemberByID(request, response);
                 break;
@@ -111,13 +112,30 @@ public class AdminController extends HttpServlet {
             case "searchCategory":
                 searchCategory(request, response);
                 break;
+            case "searchProduct":
+                searchProduct(request, response);
+                break;
             default:
                 showAdminPage(request, response);
         }
     }
 
     private void showAdminPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            request.getRequestDispatcher("/WEB-INF/views/admin.jsp").forward(request, response);
+        Member memberModel = new Member();
+        ArrayList<Member> members = memberModel.get();
+        request.setAttribute("members", members);
+
+        Product productModel = new Product();
+        ArrayList<Product> products = productModel.get();
+        request.setAttribute("products", products);
+
+        ProductCategory categoryModel = new ProductCategory();
+        ArrayList<ProductCategory> categories = categoryModel.get();
+        request.setAttribute("categories", categories);
+
+        request.setAttribute("dbConnection", true);
+
+        request.getRequestDispatcher("/WEB-INF/views/admin.jsp").forward(request, response);
     }
 
     private void handleUserManagement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -139,11 +157,11 @@ public class AdminController extends HttpServlet {
     }
 
     private void handleProductManagement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Product productModel = new Product();
-        // ArrayList<Product> products = productModel.get();
+        Product productModel = new Product();
+        ArrayList<Product> products = productModel.get();
         
-        // request.setAttribute("products", products);
-        // request.getRequestDispatcher("/WEB-INF/views/admin/admin-productcontrol.jsp").forward(request, response);
+        request.setAttribute("products", products);
+        request.getRequestDispatcher("/WEB-INF/views/admin-productcontrol.jsp").forward(request, response);
     }
 
     private void handleCategoryManagement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -154,8 +172,7 @@ public class AdminController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/admin-categorycontrol.jsp").forward(request, response);
     }
 
-    private void handleAddCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) 
-            throws ServletException, IOException {
+    private void handleAddCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         
@@ -175,12 +192,11 @@ public class AdminController extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
         }
-        
-        handleCategoryManagement(request, response);
+
+        response.sendRedirect(request.getContextPath() + "/admin");
     }
 
-    private void handleUpdateCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) 
-            throws ServletException, IOException {
+    private void handleUpdateCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
         String categoryIdStr = request.getParameter("id");
         String name = request.getParameter("name");
         String description = request.getParameter("description");
@@ -212,11 +228,10 @@ public class AdminController extends HttpServlet {
         }
         
         // Langsung render ulang partial kategori
-        handleCategoryManagement(request, response);
+        showAdminPage(request, response);
     }
 
-    private void handleDeleteCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) 
-            throws ServletException, IOException {
+    private void handleDeleteCategory(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
         String categoryIdStr = request.getParameter("id");
         try {
             if (categoryIdStr != null) {
@@ -236,8 +251,7 @@ public class AdminController extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Error: " + escapeHtml(e.getMessage()));
         }
-        // Langsung render ulang partial kategori
-        handleCategoryManagement(request, response);
+        response.sendRedirect(request.getContextPath() + "/activeSection=category");
     }
 
     private void searchMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -346,13 +360,8 @@ public class AdminController extends HttpServlet {
                   .replace("'", "&#39;");
     }
 
-    private void handleDeleteMember(HttpServletRequest request, HttpServletResponse response, Admin admin) 
-        throws ServletException, IOException {
+    private void handleDeleteMember(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
         String memberIdStr = request.getParameter("id");
-        
-        // Debug logging
-        System.out.println("=== DELETE MEMBER DEBUG ===");
-        System.out.println("Received ID parameter: " + memberIdStr);
         
         try {
             if (memberIdStr != null) {
@@ -363,16 +372,13 @@ public class AdminController extends HttpServlet {
                 Member member = new Member();
                 member.setId(memberId);
                 member.delete();
-                
-                System.out.println("Delete message: " + member.getMessage());
-                
+
                 boolean success = member.getMessage().contains("rows affected");
-                
+
                 if (success) {
-                    System.out.println("Delete successful!");
                     request.setAttribute("successMessage", "Member deleted successfully!");
                 } else {
-                    System.out.println("Delete failed - message: " + member.getMessage());
+                    request.setAttribute("errorMessage", "Failed to delete member: " + member.getMessage());
                     
                     // Check for foreign key constraint error - auto cascade delete
                     if (member.getMessage().contains("foreign key constraint")) {
@@ -405,8 +411,7 @@ public class AdminController extends HttpServlet {
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
         }
         
-        // Redirect ke user management dengan benar
-        response.sendRedirect(request.getContextPath() + "/admin?activeSection=users");
+        handleUserManagement(request, response);
     }
 
     public boolean deleteMemberWithRelatedData(int memberId) {
@@ -415,8 +420,8 @@ public class AdminController extends HttpServlet {
             System.out.println("Starting cascade delete for member ID: " + memberId);
             
             Member tempMember = new Member();
-            
-            // 1. Delete bookmark items first
+
+            // Delete bookmark items first
             System.out.println("Step 1: Deleting bookmark items...");
             String deleteBookmarkItemsSQL = "DELETE bi FROM bookmarkitems bi " +
                                         "INNER JOIN bookmark b ON bi.bookmarkId = b.id " +
@@ -426,7 +431,7 @@ public class AdminController extends HttpServlet {
             int bookmarkItemsDeleted = tempMember.executeUpdate(deleteBookmarkItemsSQL);
             System.out.println("Bookmark items deleted: " + bookmarkItemsDeleted + " rows");
             
-            // 2. Delete bookmarks
+            // Delete bookmarks
             System.out.println("Step 2: Deleting bookmarks...");
             String deleteBookmarksSQL = "DELETE FROM bookmark WHERE memberId = " + memberId;
             System.out.println("Executing: " + deleteBookmarksSQL);
@@ -434,33 +439,15 @@ public class AdminController extends HttpServlet {
             int bookmarksDeleted = tempMember.executeUpdate(deleteBookmarksSQL);
             System.out.println("Bookmarks deleted: " + bookmarksDeleted + " rows");
             
-            // 3. Delete products posted by this member
+            // Delete products posted by this member
             System.out.println("Step 3: Deleting products...");
             String deleteProductsSQL = "DELETE FROM product WHERE memberId = " + memberId;
             System.out.println("Executing: " + deleteProductsSQL);
             
             int productsDeleted = tempMember.executeUpdate(deleteProductsSQL);
             System.out.println("Products deleted: " + productsDeleted + " rows");
-            
-            // 4. Delete other related data if exists
-            /*
-            System.out.println("Step 4: Deleting orders...");
-            String deleteOrdersSQL = "DELETE FROM orders WHERE memberId = " + memberId;
-            int ordersDeleted = tempMember.executeUpdate(deleteOrdersSQL);
-            System.out.println("Orders deleted: " + ordersDeleted + " rows");
-            
-            System.out.println("Step 5: Deleting reviews...");
-            String deleteReviewsSQL = "DELETE FROM reviews WHERE memberId = " + memberId;
-            int reviewsDeleted = tempMember.executeUpdate(deleteReviewsSQL);
-            System.out.println("Reviews deleted: " + reviewsDeleted + " rows");
-            
-            System.out.println("Step 6: Deleting cart items...");
-            String deleteCartSQL = "DELETE FROM cart WHERE memberId = " + memberId;
-            int cartDeleted = tempMember.executeUpdate(deleteCartSQL);
-            System.out.println("Cart items deleted: " + cartDeleted + " rows");
-            */
-            
-            // 5. Finally delete the member
+           
+            // Finally delete the member
             System.out.println("Step 4: Deleting member...");
             Member member = new Member();
             member.setId(memberId);
@@ -483,45 +470,44 @@ public class AdminController extends HttpServlet {
         }
     }
 
-    private void handleUpdateMember(HttpServletRequest request, HttpServletResponse response, Admin admin)
-        throws ServletException, IOException {
-        String memberIdStr = request.getParameter("id");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String username = request.getParameter("username");
-        String email = request.getParameter("email");
+    // private void handleUpdateMember(HttpServletRequest request, HttpServletResponse response, Admin admin)throws ServletException, IOException {
+    //     String memberIdStr = request.getParameter("id");
+    //     String firstName = request.getParameter("firstName");
+    //     String lastName = request.getParameter("lastName");
+    //     String username = request.getParameter("username");
+    //     String email = request.getParameter("email");
         
-        try {
-            if (memberIdStr != null && firstName != null && lastName != null && username != null && email != null) {
-                int memberId = Integer.parseInt(memberIdStr);
+    //     try {
+    //         if (memberIdStr != null && firstName != null && lastName != null && username != null && email != null) {
+    //             int memberId = Integer.parseInt(memberIdStr);
                 
-                // Update member menggunakan Member model
-                Member member = new Member();
-                member.setId(memberId);
-                member.setFirstName(firstName);
-                member.setLastName(lastName);
-                member.setUsername(username);
-                member.setEmail(email);
-                member.update();
+    //             // Update member menggunakan Member model
+    //             Member member = new Member();
+    //             member.setId(memberId);
+    //             member.setFirstName(firstName);
+    //             member.setLastName(lastName);
+    //             member.setUsername(username);
+    //             member.setEmail(email);
+    //             member.update();
+    //             System.out.println("Update message: " + member.getMessage());
+    //             boolean success = member.getMessage().contains("rows affected");
                 
-                boolean success = member.getMessage().contains("rows affected");
-                
-                if (success) {
-                    request.setAttribute("successMessage", "User updated successfully!");
-                } else {
-                    request.setAttribute("errorMessage", "Failed to update user.");
-                }
-            } else {
-                request.setAttribute("errorMessage", "Missing required parameters.");
-            }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Invalid user ID.");
-        } catch (Exception e) {
-            request.setAttribute("errorMessage", "Error: " + e.getMessage());
-        }
+    //             if (success) {
+    //                 request.setAttribute("successMessage", "User updated successfully!");
+    //             } else {
+    //                 request.setAttribute("errorMessage", "Failed to update user.");
+    //             }
+    //         } else {
+    //             request.setAttribute("errorMessage", "Missing required parameters.");
+    //         }
+    //     } catch (NumberFormatException e) {
+    //         request.setAttribute("errorMessage", "Invalid user ID.");
+    //     } catch (Exception e) {
+    //         request.setAttribute("errorMessage", "Error: " + e.getMessage());
+    //     }
         
-        response.sendRedirect(request.getContextPath() + "/admin?activeSection=users");
-    }
+    //     handleUserManagement(request, response);
+    // }
 
     private void searchMemberByID(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String searchQuery = request.getParameter("searchQuery");
@@ -730,6 +716,109 @@ public class AdminController extends HttpServlet {
         }
         
         request.getRequestDispatcher("/WEB-INF/views/admin-categorycontrol.jsp").forward(request, response);
+    }
+
+    private void searchProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String chunkSearchQuery = request.getParameter("searchQuery");
+
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+
+        if (chunkSearchQuery != null && !chunkSearchQuery.trim().isEmpty()) {
+            String query = chunkSearchQuery.trim();
+            ArrayList<Integer> resultIds = new ArrayList<>();
+            String searchType = "Unknown";
+
+            try {
+                Product productModel = new Product();
+                ArrayList<Product> products;
+
+                // Auto-detect search type
+                if (query.matches("\\d+")) {
+                    // Search by ID
+                    searchType = "ID";
+                    products = productModel .findProductById(Integer.parseInt(query));
+                }  else {
+                    // Default: search by name
+                    searchType = "Name";
+                    products = productModel.findProductByName(query);
+                }
+
+                if (products != null) {
+                    for (Product p : products) {
+                        resultIds.add(p.getId());
+                    }
+                }
+
+                // Prepare response HTML
+                StringBuilder idsString = new StringBuilder();
+                for (int i = 0; i < resultIds.size(); i++) {
+                    if (i > 0) idsString.append(",");
+                    idsString.append(resultIds.get(i));
+                }
+
+                String responseHtml = "<div data-search-result-ids=\"" + idsString.toString() + "\" " +
+                                    "data-search-type=\"" + searchType + "\" " +
+                                    "data-search-term=\"" + escapeHtml(query) + "\" " +
+                                    "data-search-success=\"true\">" +
+                                    "Search completed. Found " + resultIds.size() + " results." +
+                                    "</div>";
+
+                response.getWriter().print(responseHtml);
+
+            } catch (Exception e) {
+                String errorResponse = "<div data-search-result-ids=\"\" " +
+                                    "data-search-type=\"Error\" " +
+                                    "data-search-term=\"" + escapeHtml(query) + "\" " +
+                                    "data-search-success=\"false\">" +
+                                    "Search error: " + escapeHtml(e.getMessage()) +
+                                    "</div>";
+                response.getWriter().print(errorResponse);
+            }
+        } else {
+            String emptyResponse = "<div data-search-result-ids=\"\" " +
+                            "data-search-type=\"Empty\" " +
+                            "data-search-term=\"\" " +
+                            "data-search-success=\"false\">" +
+                            "Search query is required." +
+                            "</div>";
+            response.getWriter().print(emptyResponse);
+        }
+    }
+
+    public void handleDeleteProduct(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
+        String productIdStr = request.getParameter("id");
+        
+        try {
+            if (productIdStr != null) {
+                int productId = Integer.parseInt(productIdStr);
+                Product tempProduct = new Product();
+                String deleteBookmarkItemsSQL = "DELETE FROM bookmark WHERE productId = " + productId;
+                int bookmarkItemsDeleted = tempProduct.executeUpdate(deleteBookmarkItemsSQL);
+                System.out.println("Bookmark items deleted: " + bookmarkItemsDeleted + " rows");
+
+                Product product = new Product();
+                product.setId(productId);
+                product.delete();
+
+                System.out.println("Delete product message: " + product.getMessage());
+
+                if (product.getMessage().contains("rows affected")) {
+                    request.setAttribute("successMessage", "Product deleted successfully!");
+                } else {
+                    request.setAttribute("errorMessage", "Failed to delete product.");
+                }
+            } else {
+                request.setAttribute("errorMessage", "Product ID is required.");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid product ID format.");
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Error: " + escapeHtml(e.getMessage()));
+        }
+
+        // Redirect ke product management
+        showAdminPage(request, response);
     }
 
     @Override
