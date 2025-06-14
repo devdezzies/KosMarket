@@ -48,16 +48,16 @@ public class ProfileController extends HttpServlet {
             address = new Address();
             address.setStreet("");
             address.setNumber("");
-            address.setZipCode("");
+            address.setZipCode(0);
             address.setCity("");
             address.setPhone("");
             address.update();
         } else {
-            request.setAttribute("street", address.getStreet());
-            request.setAttribute("number", address.getNumber());
-            request.setAttribute("zipCode", address.getZipCode());
-            request.setAttribute("city", address.getCity());
-            request.setAttribute("phone", address.getPhone());
+            request.setAttribute("street", address.getStreet() == null ? "" : address.getStreet());
+            request.setAttribute("number", address.getNumber() == null ? "" : address.getNumber());
+            request.setAttribute("zipCode", address.getZipCode() == 0 ? "" : address.getZipCode());
+            request.setAttribute("city", address.getCity() == null ? "" : address.getCity());
+            request.setAttribute("phone", address.getPhone() == null ? "" : address.getPhone());
         }
 
         if ("POST".equalsIgnoreCase(request.getMethod())) {
@@ -124,11 +124,12 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
-        Address address = new Address().findAddressById(user.getAddressId());
+        Address address = new Address().findAddressById(user.getAddressId()); // TODO fix address id
+        System.out.println("ADDR ID: " + user.getAddressId());
 
         String street = request.getParameter("street");
         String number = request.getParameter("number");
-        String zipCode = request.getParameter("zipCode");
+        int zipCode = Integer.parseInt(request.getParameter("zipCode") == null ? "-1" : request.getParameter("zipCode"));
         String city = request.getParameter("city");
 
         String phone = request.getParameter("phone");
@@ -154,7 +155,6 @@ public class ProfileController extends HttpServlet {
         address.setPhone(phone);
 
         address.update();
-
         session.setAttribute("address", address);
 
         response.sendRedirect(request.getContextPath() + "/profile/me?page=location&success=1");
