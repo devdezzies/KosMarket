@@ -608,7 +608,7 @@ public class AdminController extends HttpServlet {
             try {
                 int targetId = Integer.parseInt(searchQuery.trim());
                 ProductCategory categoryModel = new ProductCategory();
-                ArrayList<ProductCategory> categories = categoryModel.findById(targetId);
+                ArrayList<ProductCategory> categories = categoryModel.findByIdA(targetId);
 
                 if (categories != null && !categories.isEmpty()) {
                     request.setAttribute("categories", categories);
@@ -646,7 +646,7 @@ public class AdminController extends HttpServlet {
                     // Search by ID
                     searchType = "ID";
                     ProductCategory categoryModel = new ProductCategory();
-                    ArrayList<ProductCategory> categories = categoryModel.findById(Integer.parseInt(query));
+                    ArrayList<ProductCategory> categories = categoryModel.findByIdA(Integer.parseInt(query));
                     for (ProductCategory cat : categories) {
                         resultIds.add(cat.getId());
                     }
