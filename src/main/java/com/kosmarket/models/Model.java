@@ -113,7 +113,8 @@ public abstract class Model<E> {
                     fieldName.equals("address") ||
                     fieldName.equals("bookmark") ||
                     fieldName.equals("postedProducts") ||
-                    fieldName.equals("category")) {
+                    fieldName.equals("category") ||
+                    fieldName.equals("member")) {
                     continue;
                 }
 
