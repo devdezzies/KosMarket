@@ -19,15 +19,13 @@ public class Member extends Model<Member> {
     private Bookmark bookmark;
     private ArrayList<Product> postedProducts;
 
-    // registration
     public Member() {
         this.table = "member";
         this.primaryKey = "id";
     }
 
-    // constructor with all fields
     public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
-                 String profilePicture, int addressId, Address address, Date createdAt, Bookmark bookmark) {
+                  String profilePicture, Address address, Date createdAt, Bookmark bookmark) {
         this.table = "member";
         this.primaryKey = "id";
         this.id = id;
@@ -57,9 +55,15 @@ public class Member extends Model<Member> {
             member.setAddressId(rs.getInt("addressId"));
             member.setCreatedAt(rs.getDate("createdAt"));
             member.setProfilePicture(rs.getString("profilePicture"));
+
+            int addressId = rs.getInt("addressId");
+            Address addressModel = new Address();
+            Address fullAddress = addressModel.find(String.valueOf(addressId));
+            member.setAddress(fullAddress);
+
             return member;
-        } catch (SQLException E) {
-            System.out.println(E.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error parsing Member: " + e.getMessage());
             return null;
         }
     }
@@ -112,25 +116,9 @@ public class Member extends Model<Member> {
         return postedProducts;
     }
 
-    public void addItemToBookmark(Product product) {
-        if (bookmark == null) {
-            bookmark = new Bookmark();
-        }
-        bookmark.addItem(product);
-    }
-
-    public void removeItemFromBookmark(Product product) {
-        if (bookmark != null) {
-            bookmark.removeItem(product);
-        }
-    }
-
-    public void setBookmark(Bookmark bookmark) {
-        this.bookmark = bookmark;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    // Setters
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setFirstName(String firstName) {
@@ -165,8 +153,12 @@ public class Member extends Model<Member> {
         this.createdAt = createdAt;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBookmark(Bookmark bookmark) {
+        this.bookmark = bookmark;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public void addProduct(Product product) {
@@ -176,6 +168,7 @@ public class Member extends Model<Member> {
         postedProducts.add(product);
     }
 
+    // Finder methods
     public ArrayList<Member> findByEmail(String email) {
         String sql = "SELECT * FROM " + this.table + " WHERE email = ?";
         ArrayList<Object> params = new ArrayList<>();

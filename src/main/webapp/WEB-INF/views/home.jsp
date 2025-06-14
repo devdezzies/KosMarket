@@ -11,7 +11,7 @@
 <div class="container mx-auto px-4 py-8" style="font-family: 'Quicksand', sans-serif;">
     <div class="text-left mb-8">
         <h1 class="text-3xl md:text-4xl font-bold">Cari barang apa nih?</h1>
-        <p class="text-gray-600 mt-2">Checkout out the latest release of Basic Tees, new and improved with four openings!</p>
+        <p class="text-gray-600 mt-2">Cari yang pas? Bukan cuma pas di kantong, tapi juga pas di hati...</p>
     </div>
 
     <div class="flex flex-col md:flex-row">
@@ -65,6 +65,26 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Bookmark Filter -->
+                    <hr class="my-4 border-gray-200">
+                    <div x-data="{ open: true }" class="mb-4">
+                        <button type="button" @click="open = !open" class="w-full flex justify-between items-center cursor-pointer">
+                            <h3 class="font-bold text-lg">Bookmark</h3>
+                            <svg class="w-6 h-6 transform transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-transition class="mt-4">
+                            <div class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                                <div class="flex items-center ps-3 py-3">
+                                    <input id="filter-bookmark" name="only-bookmarked" type="checkbox"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                        <%= "on".equals(request.getParameter("only-bookmarked")) ? "checked" : "" %>>
+                                    <label for="filter-bookmark" class="ms-2 text-sm font-medium text-gray-900">Hanya yang dibookmark</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold">Apply Filters</button>
                 </form>
             </div>
@@ -84,4 +104,4 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/views/layout/layout_footer.jsp" %> 
+<%@ include file="/WEB-INF/views/layout/layout_footer.jsp" %>

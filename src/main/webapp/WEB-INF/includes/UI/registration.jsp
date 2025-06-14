@@ -6,6 +6,11 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <% if (request.getAttribute("errorMessage") != null) { %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline"><%= request.getAttribute("errorMessage") %></span>
+      </div>
+    <% } %>
     <form class="space-y-6" action="${pageContext.request.contextPath}/authentication?menu=register" method="POST">
       <div>
         <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>

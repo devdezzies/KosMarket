@@ -73,7 +73,8 @@ public class ProductCategory extends Model<ProductCategory> {
         List<ProductCategory> categories = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kosmarket", "root", "");
-            Statement stmt = conn.createStatement();
+
+             Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM productCategory")) {
 
             while (rs.next()) {

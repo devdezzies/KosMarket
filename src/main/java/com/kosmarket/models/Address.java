@@ -2,6 +2,7 @@ package com.kosmarket.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Address extends Model<Address> {
     private int id;
@@ -45,7 +46,14 @@ public class Address extends Model<Address> {
     }
 
     public Address findAddressById(int addressId) {
-        return this.find(String.valueOf(addressId));
+        return this.find(String.valueOf(addressId)); }
+
+    public Address findByMemberId(int memberId) {
+        String sql = "SELECT * FROM " + this.table + " WHERE member_id = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(memberId);
+        ArrayList<Address> addresses = this.queryWithParams(sql, params);
+        return addresses.isEmpty() ? null : addresses.get(0);
     }
 
     public int getId() {
