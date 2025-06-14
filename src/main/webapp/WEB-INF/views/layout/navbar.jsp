@@ -61,18 +61,6 @@
                 </svg>
                 <span class="font-medium">Post Product</span>
             </a>
-            <!-- tag icon -->
-            <a href="${pageContext.request.contextPath}/order" class="text-gray-600 hover:text-blue-500">
-                <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                </svg>
-            </a>
-            <!-- shopping icon -->
-            <a href="${pageContext.request.contextPath}/cart" class="text-gray-600 hover:text-blue-500">
-                <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
-                </svg>
-            </a>
             <!-- profile icon -->
             <div class="relative">
                 <button id="profile-menu-button" class="text-gray-600 hover:text-blue-500 focus:outline-none cursor-pointer">
@@ -135,18 +123,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 <span class="ml-3 font-medium">Post Product</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/order" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <svg class="h-7 w-7 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                </svg>
-                <span class="ml-3 text-gray-700">My Orders</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/cart" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <svg class="h-7 w-7 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
-                </svg>
-                <span class="ml-3 text-gray-700">Cart</span>
             </a>
             <a href="${pageContext.request.contextPath}/account" class="flex items-center p-2 rounded hover:bg-gray-100">
                 <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">

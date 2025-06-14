@@ -1,4 +1,7 @@
 package com.kosmarket.controllers;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.kosmarket.models.Member;
 import com.kosmarket.models.Product;
 import com.kosmarket.models.ProductCategory;
@@ -6,14 +9,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "ProductControllerServlet", urlPatterns = "/product")
-
 @MultipartConfig( // ← ini WAJIB ADA untuk handle upload file
         fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
         maxFileSize = 1024 * 1024 * 10,       // 10MB
@@ -22,9 +26,6 @@ import java.util.List;
 public class ProductController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doGet");
-
-
         String menu = request.getParameter("menu");
         String idParam = request.getParameter("id");
 
@@ -45,7 +46,6 @@ public class ProductController extends HttpServlet {
                 System.out.println("[ERROR] Invalid product ID format: " + idParam);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID");
             }
-
         } else if ("product_post".equals(menu)) {
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("isLoggedIn") == null || session.getAttribute("member") == null) {
@@ -59,7 +59,6 @@ public class ProductController extends HttpServlet {
             List<ProductCategory> categories = ProductCategory.getAll();
             request.setAttribute("categories", categories);
             request.getRequestDispatcher("/WEB-INF/views/postProduct.jsp").forward(request, response);
-
         } else {
             List<Product> products = productModel.get();
             request.setAttribute("products", products);
@@ -68,9 +67,7 @@ public class ProductController extends HttpServlet {
     }
 
 
-
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("doPost");
         Timestamp createdAt = new Timestamp(System.currentTimeMillis());
         String menu = request.getParameter("menu");
         HttpSession session = request.getSession(false);
@@ -84,7 +81,6 @@ public class ProductController extends HttpServlet {
             String itemCountStr = request.getParameter("itemCount");
             String location = request.getParameter("location"); // Fixed: bukan passwor
             String categoryIdStr = request.getParameter("categoryId");
-            System.out.println(name);
 
             Part filePart = request.getPart("image"); // ambil file part dari form
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // ambil nama file asli
@@ -95,11 +91,16 @@ public class ProductController extends HttpServlet {
 
             String filePath = uploadPath + File.separator + fileName;
             filePart.write(filePath); // simpan file ke server
+            Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                    "cloud_name", "dnvkjpx1u",
+                    "api_key", "959939748497957",
+                    "api_secret", "PZLPSgkK8v6plVzv9z4HmXYgkiA",
+                    "secure", true));
+            File uploadFile = new File(filePath);
+            Map uploadResult = cloudinary.uploader().upload(uploadFile, ObjectUtils.emptyMap());
+            String imageUrl = uploadResult.get("secure_url").toString();
 
-
-            String imageUrl = "https://images.unsplash.com/photo-1743844915361-13c93d59c965?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" + fileName; // url relatif, bisa diakses dari JSP
-
-
+            System.out.println("FILENAME: " + fileName);
             try {
                 // Validasi input
                 if (name == null || name.trim().isEmpty()) {
@@ -133,7 +134,6 @@ public class ProductController extends HttpServlet {
                 newProduct.setDescription(description != null ? description : "");
                 newProduct.setPrice(price);
                 newProduct.setItemCount(itemCount);
-                newProduct.setLocation(location != null ? location : "");
                 newProduct.setImageUrl(imageUrl);
                 newProduct.setCategoryId(categoryId);
                 newProduct.setCreatedAt(createdAt);

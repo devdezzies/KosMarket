@@ -11,7 +11,7 @@
 <div class="container mx-auto px-4 py-8" style="font-family: 'Quicksand', sans-serif;">
     <div class="text-left mb-8">
         <h1 class="text-3xl md:text-4xl font-bold">Cari barang apa nih?</h1>
-        <p class="text-gray-600 mt-2">Checkout out the latest release of Basic Tees, new and improved with four openings!</p>
+        <p class="text-gray-600 mt-2">Cari yang pas? Bukan cuma pas di kantong, tapi juga pas di hati...</p>
     </div>
 
     <div class="flex flex-col md:flex-row">

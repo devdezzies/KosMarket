@@ -31,7 +31,7 @@
 %>
 
 
-<div class="bg-gray-50 min-h-screen py-6">
+<div class="bg-white min-h-screen py-6">
 	<div class="container mx-auto px-4 max-w-6xl">
 		<!-- Breadcrumb -->
 		<nav class="mb-6">
@@ -80,9 +80,10 @@
 						<span class="text-blue-600 font-semibold ml-2">Tidak diketahui</span>
 						<% } %>
 
-
-
-						<div class="ml-2 w-2 h-2 bg-green-400 rounded-full"></div>
+						<div class="px-2 py-2 relative inline-flex items-center justify-center">
+							<div class="rounded-full bg-green-400 h-[8px] w-[8px] inline-block mr-2"></div>
+							<div class="absolute animate-ping rounded-full bg-green-400 h-[8px] w-[8px] mr-2"></div>
+						</div>
 					</div>
 
 					<h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">
@@ -116,40 +117,40 @@
 							</button>
 
 							<script>
-								function toggleBookmark(productId) {
-									const btn = document.getElementById("bookmarkBtn");
+                                function toggleBookmark(productId) {
+                                    const btn = document.getElementById("bookmarkBtn");
 
-									const isFilled = btn.classList.contains("bg-blue-500");
-									const action = isFilled ? "remove" : "add";
+                                    const isFilled = btn.classList.contains("bg-blue-500");
+                                    const action = isFilled ? "remove" : "add";
 
-									fetch('/bookmark', {
-										method: 'POST',
-										headers: {
-											'Content-Type': 'application/x-www-form-urlencoded'
-										},
-										body: new URLSearchParams({
-											action: action,
-											productId: productId
-										})
-									})
-											.then(res => res.json())
-											.then(data => {
-												if (data.success) {
-													if (action === "add") {
-														btn.classList.remove("border", "text-blue-500");
-														btn.classList.add("bg-blue-500", "text-white");
-													} else {
-														btn.classList.remove("bg-blue-500", "text-white");
-														btn.classList.add("border", "text-blue-500");
-													}
-												} else {
-													alert(data.message);
-												}
-											})
-											.catch(err => {
-												console.error("Bookmark error:", err);
-											});
-								}
+                                    fetch('/bookmark', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded'
+                                        },
+                                        body: new URLSearchParams({
+                                            action: action,
+                                            productId: productId
+                                        })
+                                    })
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                if (action === "add") {
+                                                    btn.classList.remove("border", "text-blue-500");
+                                                    btn.classList.add("bg-blue-500", "text-white");
+                                                } else {
+                                                    btn.classList.remove("bg-blue-500", "text-white");
+                                                    btn.classList.add("border", "text-blue-500");
+                                                }
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.error("Bookmark error:", err);
+                                        });
+                                }
 							</script>
 
 						</div>
@@ -205,10 +206,10 @@
 					</div>
 
 					<script>
-						function openWhatsApp() {
-							const whatsappUrl = 'https://wa.me/<%= phoneNumber %>?text=Halo,%20saya%20tertarik%20dengan%20produk%20yang%20Anda%20jual.';
-							window.open(whatsappUrl, '_blank');
-						}
+                        function openWhatsApp() {
+                            const whatsappUrl = 'https://wa.me/<%= phoneNumber %>?text=Halo,%20saya%20tertarik%20dengan%20produk%20yang%20Anda%20jual.';
+                            window.open(whatsappUrl, '_blank');
+                        }
 					</script>
 				</div>
 			</div>
@@ -217,4 +218,3 @@
 </div>
 
 <%@ include file="/WEB-INF/views/layout/layout_footer.jsp"%>
-
