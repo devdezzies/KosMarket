@@ -24,6 +24,7 @@ public class Product extends Model<Product> {
         this.primaryKey = "id";
     }
 
+
     public Product(String name, Member member, String description, double price, int itemCount, ProductCategory category, String imageUrl) {
         this();
         this.name = name;
@@ -33,24 +34,28 @@ public class Product extends Model<Product> {
         this.price = price;
         this.itemCount = itemCount;
         this.category = category;
-//      this.location = location;
         this.imageUrl = imageUrl;
     }
+
 
     @Override
     Product toModel(ResultSet rs) {
         try {
             Product product = new Product();
             product.setId(rs.getInt("id"));
+            product.setMemberId(rs.getInt("memberId"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
             product.setPrice(rs.getDouble("price"));
             product.setItemCount(rs.getInt("itemCount"));
             product.setImageUrl(rs.getString("imageUrl"));
             product.setCreatedAt(rs.getTimestamp("createdAt"));
+
             ProductCategory categoryModel = new ProductCategory();
             int categoryId = rs.getInt("categoryId");
-            ProductCategory category = categoryModel.find(String.valueOf(categoryId));
+            product.setCategoryId(categoryId);
+
+            ProductCategory category = new ProductCategory().find(String.valueOf(categoryId));
             product.setCategory(category);
 
             int memberId = rs.getInt("memberId");
@@ -69,6 +74,10 @@ public class Product extends Model<Product> {
 
     public int getId() {
         return id;
+    }
+
+    public int getMemberId() {
+        return memberId;
     }
 
     public String getName() {
@@ -94,6 +103,10 @@ public class Product extends Model<Product> {
         return categoryId;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
     public ProductCategory getCategory() {
         return category;
     }
@@ -109,8 +122,20 @@ public class Product extends Model<Product> {
         this.createdAt = createdAt;
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
     public void setName(String name) {
@@ -138,9 +163,9 @@ public class Product extends Model<Product> {
         this.category = category;
     }
 
+
     public void setCategoryId(int category) {
         this.categoryId = category;
-    }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;

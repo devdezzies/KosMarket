@@ -110,7 +110,10 @@ public abstract class Model<E> {
                 }
 
                 if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) ||
-                        fieldName.equals("address") || fieldName.equals("bookmark") || fieldName.equals("postedProducts")) {
+                    fieldName.equals("address") ||
+                    fieldName.equals("bookmark") ||
+                    fieldName.equals("postedProducts") ||
+                    fieldName.equals("category")) {
                     continue;
                 }
 

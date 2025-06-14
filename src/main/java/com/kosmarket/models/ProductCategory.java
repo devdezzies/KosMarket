@@ -65,10 +65,15 @@ public class ProductCategory extends Model<ProductCategory> {
         return description;
     }
 
+    public ProductCategory findById(int id) {
+        return this.find(String.valueOf(id));
+    }
+
     public static List<ProductCategory> getAll() {
         List<ProductCategory> categories = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kosmarket", "root", "");
+
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM productCategory")) {
 

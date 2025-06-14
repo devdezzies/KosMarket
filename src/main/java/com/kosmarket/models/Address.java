@@ -45,6 +45,9 @@ public class Address extends Model<Address> {
         }
     }
 
+    public Address findAddressById(int addressId) {
+        return this.find(String.valueOf(addressId)); }
+
     public Address findByMemberId(int memberId) {
         String sql = "SELECT * FROM " + this.table + " WHERE member_id = ?";
         ArrayList<Object> params = new ArrayList<>();
