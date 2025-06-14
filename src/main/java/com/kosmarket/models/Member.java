@@ -185,3 +185,4 @@ public class Member extends Model<Member> {
         return this.queryWithParams(sql, params);
     }  
 }
+    

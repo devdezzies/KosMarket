@@ -350,7 +350,6 @@ public class AdminController extends HttpServlet {
         }
     }
 
-    // Helper method untuk escape HTML
     private String escapeHtml(String str) {
         if (str == null) return "";
         return str.replace("&", "&amp;")
