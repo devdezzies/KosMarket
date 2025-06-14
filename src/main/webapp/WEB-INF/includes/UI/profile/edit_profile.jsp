@@ -13,6 +13,23 @@
             } 
         %>
 
+        <%
+            String error = request.getParameter("error");
+            if (error != null) {
+                String errorMsg = "";
+                if ("email_exists".equals(error)) {
+                    errorMsg = "Email sudah digunakan oleh akun lain.";
+                } else {
+                    errorMsg = "Terjadi kesalahan saat memperbarui profil.";
+                }
+        %>
+            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
+                <%= errorMsg %>
+            </div>
+        <%
+            }
+        %>
+
                 <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Profil</h1>
                 <div class="flex items-center mb-8">
                     <div class="relative">
