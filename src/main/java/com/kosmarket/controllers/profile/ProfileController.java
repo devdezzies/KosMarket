@@ -22,7 +22,13 @@ public class ProfileController extends HttpServlet {
                     ? request.getQueryString().split("page=")[1].split("&")[0]
                     : "";
         }
+
         HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/authentication");
+            return;
+        }
+
         Member user = (Member) session.getAttribute("member");
 
         if (user == null) {
@@ -128,7 +134,12 @@ public class ProfileController extends HttpServlet {
         String phone = request.getParameter("phone");
         if (phone != null) {
             phone = phone.trim();
-            phone = "62" + phone;
+
+            phone = phone.replaceAll("[\\s\\-()]", "");
+
+            if (!phone.startsWith("62")) {
+                phone = "62" + phone.replaceFirst("^0+", "");
+            }
 
             if (!phone.matches("^62[0-9]{8,}$")) {
                 response.sendRedirect(request.getContextPath() + "/profile/me?page=location&error=phone");
