@@ -1,18 +1,20 @@
 package com.kosmarket.controllers;
 
-import com.kosmarket.models.Address;
-import com.kosmarket.models.Member;
-import com.kosmarket.utils.PasswordUtil;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
+import com.kosmarket.models.Admin;
+import com.kosmarket.models.Address;
+import com.kosmarket.models.Member;
+import com.kosmarket.utils.PasswordUtil;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "AuthenticationControllerServlet", urlPatterns = "/authentication")
 public class AuthenticationController extends HttpServlet {
@@ -54,11 +56,22 @@ public class AuthenticationController extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
+            Admin adminModel = new Admin();
+            Admin admin = adminModel.findByEmail(email);
+
+            if (admin != null && password.equals(admin.getHashedPassword())) {
+                HttpSession session = request.getSession();
+                session.setAttribute("admin", admin);
+                session.setAttribute("isLoggedIn", true);
+                response.sendRedirect(request.getContextPath() + "/admin");
+                return;
+            }
+
             Member memberModel = new Member();
             ArrayList<Member> users = memberModel.findByEmail(email);
 
             if (!users.isEmpty()) {
-                Member user = users.getFirst();
+                Member user = users.get(0);
                 if (PasswordUtil.checkPassword(password, user.getHashedPassword())) {
                     HttpSession session = request.getSession();
                     session.setAttribute("member", user);

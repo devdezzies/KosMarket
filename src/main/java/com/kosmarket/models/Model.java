@@ -254,6 +254,20 @@ public abstract class Model<E> {
         return null;
     }
 
+    public int executeUpdate(String sql) {
+        int result = 0;
+        try {
+            connect();
+            result = stmt.executeUpdate(sql);
+            message = result + " rows affected";
+        } catch (SQLException e) {
+            message = "Error executing update: " + e.getMessage();
+            System.err.println("SQL Error: " + e.getMessage());
+        } finally {
+            disconnect();
+        }
+        return result;
+    }
     public void select(String cols) {
         select = cols;
     }
@@ -281,5 +295,4 @@ public abstract class Model<E> {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }

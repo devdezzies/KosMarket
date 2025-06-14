@@ -45,3 +45,7 @@ yarn-error.log
 
 ### Tailwind CSS ###
 src/main/webapp/css/tailwind.css
+
+.mvn/
+.idea/
+.smarttomcat/
