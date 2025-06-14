@@ -81,7 +81,7 @@
 
                 <!-- Form Content -->
                 <form action="product" method="post" enctype="multipart/form-data" class="p-6 space-y-6">
-                    <input type="hidden" name="menu" value="add_product" >
+                    <input type="hidden" name="menu" value="add_product">
 
                     <!-- Basic Information Section -->
                     <div class="space-y-6">
@@ -110,7 +110,7 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-3 top-3 text-gray-500 text-sm">Rp</span>
-                                    <input type="number" id="price" name="price" min="0" step="100" required
+                                    <input type="number" id="price" name="price" min="0" step="1" required
                                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                                            placeholder="0">
                                 </div>
@@ -169,12 +169,12 @@
                             </div>
 
                             <!-- Location -->
-                            <div>
-                                <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                                <input type="text" id="location" name="location"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                                       placeholder="e.g., Jakarta Selatan">
-                            </div>
+<%--                            <div>--%>
+<%--                                <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Location</label>--%>
+<%--                                <input type="text" id="location" name="location"--%>
+<%--                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"--%>
+<%--                                       placeholder="e.g., Jakarta Selatan">--%>
+<%--                            </div>--%>
                         </div>
                     </div>
 

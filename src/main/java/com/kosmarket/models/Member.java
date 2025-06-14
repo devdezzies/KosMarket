@@ -16,17 +16,16 @@ public class Member extends Model<Member> {
     private Address address;
     private int addressId;
     private Date createdAt;
+    private Bookmark bookmark;
     private ArrayList<Product> postedProducts;
 
-    // registration
     public Member() {
         this.table = "member";
         this.primaryKey = "id";
     }
 
-    // constructor with all fields
     public Member(int id, String username, String hashedPassword, String firstName, String lastName, String email,
-                 String profilePicture, Address address, Date createdAt) {
+                  String profilePicture, Address address, Date createdAt, Bookmark bookmark) {
         this.table = "member";
         this.primaryKey = "id";
         this.id = id;
@@ -37,8 +36,8 @@ public class Member extends Model<Member> {
         this.hashedPassword = hashedPassword;
         this.profilePicture = profilePicture;
         this.address = address;
-        this.addressId = address.getId();
         this.createdAt = createdAt;
+        this.bookmark = bookmark;
         this.postedProducts = new ArrayList<>();
     }
 
@@ -54,17 +53,15 @@ public class Member extends Model<Member> {
             member.setHashedPassword(rs.getString("hashedPassword"));
             member.setCreatedAt(rs.getDate("createdAt"));
             member.setProfilePicture(rs.getString("profilePicture"));
-
-            int addressId = rs.getInt("addressId");
             member.setAddressId(rs.getInt("addressId"));
-
+            int addressId = rs.getInt("addressId");
             Address addressModel = new Address();
-            Address address = addressModel.find(String.valueOf(addressId));
-            member.setAddress(address);
+            Address fullAddress = addressModel.find(String.valueOf(addressId));
+            member.setAddress(fullAddress);
 
             return member;
-        } catch (SQLException E) {
-            System.out.println(E.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error parsing Member: " + e.getMessage());
             return null;
         }
     }
@@ -97,10 +94,20 @@ public class Member extends Model<Member> {
         return address;
     }
 
-    public int getAddressId() { return addressId; }
-
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public Bookmark getBookmark() {
+        return bookmark;
     }
 
     public String getProfilePicture() {
@@ -111,8 +118,9 @@ public class Member extends Model<Member> {
         return postedProducts;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    // Setters
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setFirstName(String firstName) {
@@ -139,14 +147,16 @@ public class Member extends Model<Member> {
         this.address = address;
     }
 
-    public void setAddressId(int addressId) { this.addressId = addressId; }
-
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBookmark(Bookmark bookmark) {
+        this.bookmark = bookmark;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public void addProduct(Product product) {
@@ -156,6 +166,7 @@ public class Member extends Model<Member> {
         postedProducts.add(product);
     }
 
+    // Finder methods
     public ArrayList<Member> findByEmail(String email) {
         String sql = "SELECT * FROM " + this.table + " WHERE email = ?";
         ArrayList<Object> params = new ArrayList<>();
@@ -169,7 +180,7 @@ public class Member extends Model<Member> {
         params.add(username);
         return this.queryWithParams(sql, params);
     }
-
+  
     public ArrayList<Member> findById(int id) {
         String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
         ArrayList<Object> params = new ArrayList<>();
@@ -185,4 +196,3 @@ public class Member extends Model<Member> {
         return this.queryWithParams(sql, params);
     }  
 }
-    

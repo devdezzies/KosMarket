@@ -61,18 +61,6 @@
                 </svg>
                 <span class="font-medium">Post Product</span>
             </a>
-            <!-- tag icon -->
-            <a href="${pageContext.request.contextPath}/order" class="text-gray-600 hover:text-blue-500">
-                <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                </svg>
-            </a>
-            <!-- shopping icon -->
-            <a href="${pageContext.request.contextPath}/cart" class="text-gray-600 hover:text-blue-500">
-                <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
-                </svg>
-            </a>
             <!-- profile icon -->
             <div class="relative">
                 <button id="profile-menu-button" class="text-gray-600 hover:text-blue-500 focus:outline-none cursor-pointer">
@@ -90,18 +78,11 @@
                         <p class="text-sm text-gray-600"><%= email %></p>
                     </div>
                     <div class="border-t border-gray-200"></div>
-                    <a href="${pageContext.request.contextPath}/account/edit" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <a href="${pageContext.request.contextPath}/profile/me" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                         <svg class="h-5 w-5 mr-3 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                         Edit profile
-                    </a>
-                    <a href="${pageContext.request.contextPath}/account/settings" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <svg class="h-5 w-5 mr-3 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-1.003 1.11-1.226.554-.223 1.19-.223 1.745 0 .55.223 1.02.684 1.11 1.226l.092.548a4.873 4.873 0 00.62 1.434l.493.856c.23.397.63.693 1.08.79l.69.146a4.873 4.873 0 001.434-.62l.856-.493c.397-.23.832-.23 1.226 0l.548.316c.542.312.87.892.87 1.515v.39c0 .623-.328 1.203-.87 1.515l-.548.316a1.46 1.46 0 01-1.226 0l-.856-.493a4.873 4.873 0 00-1.434-.62l-.69.146c-.45.097-.85.393-1.08.79l-.493.856a4.873 4.873 0 00-.62 1.434l-.092.548c-.09.542-.56 1.003-1.11 1.226-.554.223-1.19-.223-1.745 0-.55-.223-1.02-.684-1.11-1.226l-.092-.548a4.873 4.873 0 00-.62-1.434l-.493-.856a1.46 1.46 0 01-1.08-.79l-.69-.146a4.873 4.873 0 00-1.434.62l-.856.493c-.397.23-.832.23-1.226 0l-.548-.316c-.542-.312-.87-.892-.87-1.515v-.39c0-.623.328-1.203.87-1.515l.548-.316a1.46 1.46 0 011.226 0l.856.493c.47-.27.98-.442 1.5-.533l.092-.548z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Account settings
                     </a>
                     <div class="border-t border-gray-200"></div>
                     <a href="${pageContext.request.contextPath}/authentication?menu=logout" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
@@ -136,19 +117,7 @@
                 </svg>
                 <span class="ml-3 font-medium">Post Product</span>
             </a>
-            <a href="${pageContext.request.contextPath}/order" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <svg class="h-7 w-7 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                </svg>
-                <span class="ml-3 text-gray-700">My Orders</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/cart" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <svg class="h-7 w-7 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
-                </svg>
-                <span class="ml-3 text-gray-700">Cart</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/account" class="flex items-center p-2 rounded hover:bg-gray-100">
+            <a href="${pageContext.request.contextPath}/profile/me" class="flex items-center p-2 rounded hover:bg-gray-100">
                 <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                     <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0" />

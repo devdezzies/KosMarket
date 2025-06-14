@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.kosmarket.models.Admin;
+import com.kosmarket.models.Address;
 import com.kosmarket.models.Member;
 import com.kosmarket.utils.PasswordUtil;
 
@@ -98,6 +99,7 @@ public class AuthenticationController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
 
+
         try {
             // validate input
             if (firstName == null || firstName.trim().isEmpty() ||
@@ -140,13 +142,27 @@ public class AuthenticationController extends HttpServlet {
 
             // register using Member model
             Member newMember = new Member();
+            Address newAddress = new Address();
             newMember.setFirstName(firstName);
             newMember.setLastName(lastName);
             newMember.setEmail(email);
+            newMember.setProfilePicture("https://avatar.iran.liara.run/public/boy?username=" + username);
             newMember.setUsername(username);
             newMember.setHashedPassword(PasswordUtil.hashPassword(password));
             newMember.setCreatedAt(new Date());
-
+            newAddress.setNumber("");
+            newAddress.setStreet("");
+            newAddress.setCity("");
+            newAddress.setZipCode(0);
+            newAddress.insert();
+            
+            // Find the newly created address to get its ID
+            ArrayList<Address> addresses = newAddress.get();
+            if (addresses.isEmpty()) {
+                throw new Exception("Failed to create address record");
+            }
+            Address createdAddress = addresses.get(addresses.size() - 1); // Get the last inserted address
+            newMember.setAddressId(createdAddress.getId());
             newMember.insert();
 
             // fetch the newly created member to get all data (including ID)
