@@ -91,7 +91,7 @@ public class ProductCategory extends Model<ProductCategory> {
         return getMessage() != null && getMessage().contains("rows affected");
     }
 
-    public ArrayList<ProductCategory> findById(int id) {
+    public ArrayList<ProductCategory> findByIdA(int id) {
         String sql = "SELECT * FROM " + this.table + " WHERE id = ?";
         ArrayList<Object> params = new ArrayList<>();
         params.add(id);
