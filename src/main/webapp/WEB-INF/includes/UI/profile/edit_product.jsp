@@ -155,7 +155,7 @@
             <div class="space-y-6">
                 <div class="border-b border-gray-200 pb-4">
                     <h3 class="text-lg font-medium text-gray-900">Foto</h3>
-                    <p class="text-sm text-gray-500">Masukkan foto produk anda</p>
+                    <p class="text-sm text-gray-500">Masukkan foto dari produk anda</p>
                 </div>
 
                 <!-- Image URL -->
