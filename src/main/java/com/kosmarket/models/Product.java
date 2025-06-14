@@ -18,7 +18,6 @@ public class Product extends Model<Product> {
     private String location;
     private String imageUrl;
     private int categoryId;
-    private int memberId;
 
     public Product() {
         super();
