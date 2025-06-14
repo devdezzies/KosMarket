@@ -134,7 +134,7 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all duration-200"
                             placeholder="Describe your product features, condition, and any important details..."><%= product != null ? product.getDescription() : "" %></textarea>
                     <div class="flex justify-between mt-1">
-                        <p class="text-xs text-gray-500">Jelaskan secara rinci dan jujur ​​tentang produk Anda</p>
+                        <p class="text-xs text-gray-500">Jelaskan secara rinci dan jujur tentang produk Anda</p>
                         <span class="text-xs text-gray-400" id="char-count">0/500</span>
                     </div>
                 </div>
