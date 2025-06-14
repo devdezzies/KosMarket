@@ -8,7 +8,7 @@ public class Address extends Model<Address> {
     private int id;
     private String street;
     private String number;
-    private String zipCode;
+    private int zipCode;
     private String city;
     private String phone;
 
@@ -18,7 +18,7 @@ public class Address extends Model<Address> {
         this.primaryKey = "id";
     }
 
-    public Address(int id, String street, String number, String zipCode, String city, String phone) {
+    public Address(int id, String street, String number, int zipCode, String city, String phone) {
         this();
         this.id = id;
         this.street = street;
@@ -35,7 +35,7 @@ public class Address extends Model<Address> {
             address.setId(rs.getInt("id"));
             address.setStreet(rs.getString("street"));
             address.setNumber(rs.getString("number"));
-            address.setZipCode(rs.getString("zipCode"));
+            address.setZipCode(rs.getInt("zipCode"));
             address.setCity(rs.getString("city"));
             address.setPhone(rs.getString("phone"));
             return address;
@@ -68,7 +68,7 @@ public class Address extends Model<Address> {
         return number;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
@@ -92,7 +92,7 @@ public class Address extends Model<Address> {
         this.number = number;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
 
@@ -117,7 +117,7 @@ public class Address extends Model<Address> {
             if (sb.length() > 0) sb.append(", ");
             sb.append(city);
         }
-        if (zipCode != null && !zipCode.isEmpty()) {
+        if (zipCode != 0) {
             if (sb.length() > 0) sb.append(" ");
             sb.append(zipCode);
         }

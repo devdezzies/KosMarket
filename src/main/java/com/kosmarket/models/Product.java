@@ -86,7 +86,6 @@ public class Product extends Model<Product> {
 
     public Member getMember() { return member; }
 
-    public int getMemberId() { return memberId; }
 
     public String getDescription() {
         return description;
@@ -99,10 +98,6 @@ public class Product extends Model<Product> {
     public int getItemCount() {
         return itemCount;
     }
-    public int getCategoryId() {
-        return categoryId;
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -122,20 +117,8 @@ public class Product extends Model<Product> {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
     }
 
     public void setName(String name) {
@@ -166,6 +149,7 @@ public class Product extends Model<Product> {
 
     public void setCategoryId(int category) {
         this.categoryId = category;
+    }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
