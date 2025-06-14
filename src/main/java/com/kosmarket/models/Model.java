@@ -137,7 +137,6 @@ public abstract class Model<E> {
         try {
             connect();
             Object pkValue = 0;
-            System.out.println("Deleting from table: " + table);
             for (Field field : this.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (field.getName().equals(primaryKey)) {

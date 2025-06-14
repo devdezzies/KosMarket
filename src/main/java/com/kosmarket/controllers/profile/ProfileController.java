@@ -36,7 +36,6 @@ public class ProfileController extends HttpServlet {
         request.setAttribute("firstName", user.getFirstName());
         request.setAttribute("lastName", user.getLastName());
         request.setAttribute("email", user.getEmail());
-        request.setAttribute("username", user.getUsername());
         request.setAttribute("profilePicture", user.getProfilePicture());
 
         if (address == null) {
