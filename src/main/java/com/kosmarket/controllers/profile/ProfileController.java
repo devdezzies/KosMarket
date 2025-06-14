@@ -103,6 +103,15 @@ public class ProfileController extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         
+        ArrayList<Member> existingMembers = new Member().findByEmail(email);
+        if (!existingMembers.isEmpty()) {
+            Member existing = existingMembers.get(0);
+            if (existing.getId() != user.getId()) {
+                response.sendRedirect(request.getContextPath() + "/profile/me?page=me&error=email_exists");
+                return;
+            }
+        }
+
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
