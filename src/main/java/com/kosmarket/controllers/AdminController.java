@@ -2,11 +2,13 @@ package com.kosmarket.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.kosmarket.models.Admin;
 import com.kosmarket.models.Member;
 import com.kosmarket.models.Product;
 import com.kosmarket.models.ProductCategory;
+import com.kosmarket.models.ProductReport;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -41,6 +43,9 @@ public class AdminController extends HttpServlet {
                 case "categories":
                     handleCategoryManagement(request, response);
                     return;
+                case "productreport":
+                    handleProductReportManagement(request, response);
+                    return;
             }
         }
         
@@ -55,6 +60,9 @@ public class AdminController extends HttpServlet {
                     break;
                 case "/categories":
                     handleCategoryManagement(request, response);
+                    break;
+                case "/productreport":
+                    handleProductReportManagement(request, response);
                     break;
                 default:
                     showAdminPage(request, response);
@@ -115,6 +123,9 @@ public class AdminController extends HttpServlet {
             case "searchProduct":
                 searchProduct(request, response);
                 break;
+            case "deleteProductReport":
+                handleDeleteProductReport(request, response, admin);
+                break;
             default:
                 showAdminPage(request, response);
         }
@@ -162,6 +173,21 @@ public class AdminController extends HttpServlet {
         
         request.setAttribute("products", products);
         request.getRequestDispatcher("/WEB-INF/views/admin-productcontrol.jsp").forward(request, response);
+    }
+
+    private void handleProductReportManagement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<ProductReport> reports = ProductReport.getAll(); // Gunakan getAll(), bukan getAllWithProductAndReporter()
+        System.out.println("[DEBUG] Reports loaded: " + (reports != null ? reports.size() : "null"));
+        
+        // Debug: print each report ID
+        if (reports != null) {
+            for (ProductReport report : reports) {
+                System.out.println("[DEBUG] Report ID: " + report.getId() + ", Product ID: " + report.getProductId());
+            }
+        }
+        
+        request.setAttribute("reports", reports);
+        request.getRequestDispatcher("/WEB-INF/views/admin-productreport.jsp").forward(request, response);
     }
 
     private void handleCategoryManagement(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -817,6 +843,28 @@ public class AdminController extends HttpServlet {
         }
 
         // Redirect ke product management
+        showAdminPage(request, response);
+    }
+
+    private void handleDeleteProductReport(HttpServletRequest request, HttpServletResponse response, Admin admin) throws ServletException, IOException {
+        String reportIdStr = request.getParameter("id");
+        System.out.println("[DEBUG] Delete report called, id=" + reportIdStr);
+        try {
+            if (reportIdStr != null && !reportIdStr.trim().isEmpty()) {
+                int reportId = Integer.parseInt(reportIdStr);
+                ProductReport.deleteReport(reportId);
+                System.out.println("[DEBUG] Report deleted: " + reportId);
+                request.setAttribute("successMessage", "Report deleted successfully!");
+            } else {
+                System.out.println("[ERROR] Report ID is null or empty");
+                request.setAttribute("errorMessage", "Report ID is required.");
+            }
+        } catch (Exception e) {
+            System.out.println("[ERROR] Error deleting report: " + e.getMessage());
+            request.setAttribute("errorMessage", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    
         showAdminPage(request, response);
     }
 

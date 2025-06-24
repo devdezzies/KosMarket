@@ -6,9 +6,22 @@
 <%
     List<Product> products = (List<Product>) request.getAttribute("products");
     List<ProductCategory> categories = (List<ProductCategory>) request.getAttribute("categories");
+    String successMessage = (String) request.getAttribute("successMessage");
 %>
 
 <div class="container mx-auto px-4 py-8" style="font-family: 'Quicksand', sans-serif;">
+    
+    <!-- SUCCESS MESSAGE UNTUK REPORT -->
+    <% if (successMessage != null) { %>
+    <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center">
+        <i class="fas fa-check-circle mr-3 text-green-600"></i>
+        <span><%= successMessage %></span>
+        <button onclick="this.parentElement.style.display='none'" class="ml-auto text-green-600 hover:text-green-800">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <% } %>
+
     <div class="text-left mb-8">
         <h1 class="text-3xl md:text-4xl font-bold">Cari barang apa nih?</h1>
         <p class="text-gray-600 mt-2">Cari yang pas? Bukan cuma pas di kantong, tapi juga pas di hati...</p>

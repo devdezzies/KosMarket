@@ -1,18 +1,19 @@
 package com.kosmarket.controllers;
 
-import com.kosmarket.models.Product;
-import com.kosmarket.models.ProductCategory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.kosmarket.models.Bookmark;
 import com.kosmarket.models.Member;
+import com.kosmarket.models.Product;
+import com.kosmarket.models.ProductCategory;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "HomeControllerServlet", urlPatterns = "/home")
 public class HomeController extends HttpServlet {
@@ -84,6 +85,12 @@ public class HomeController extends HttpServlet {
         ProductCategory categoryModel = new ProductCategory();
         List<ProductCategory> categoriesList = categoryModel.get();
         request.setAttribute("categories", categoriesList);
+
+        // CEK PARAMETER REPORT SUCCESS
+        String reportStatus = request.getParameter("report");
+        if ("success".equals(reportStatus)) {
+            request.setAttribute("successMessage", "Laporan produk berhasil dikirim! Terima kasih atas kontribusi Anda.");
+        }
 
         request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
     }

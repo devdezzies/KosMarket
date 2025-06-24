@@ -118,6 +118,18 @@ public class Member extends Model<Member> {
         return postedProducts;
     }
 
+    public String getName() {
+        if (firstName != null && lastName != null) {
+            return firstName + " " + lastName;
+        } else if (firstName != null) {
+            return firstName;
+        } else if (lastName != null) {
+            return lastName;
+        } else {
+            return "Unknown";
+        }
+    }
+
     // Setters
     public void setId(int id) {
         this.id = id;

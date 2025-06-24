@@ -70,6 +70,10 @@
                             <i class="fas fa-tags mr-3 flex-shrink-0"></i>
                             <span class="text-xs md:text-sm whitespace-nowrap">Category Management</span>
                         </a>
+                        <a onclick="selectMenu(this, 'productreport')" class="menu-item flex w-full rounded-full bg-white-200 px-4 py-3 text-sm/6 font-bold text-gray-700 hover:bg-gray-300 transition-colors items-center">
+                            <i class="fas fa-warning mr-3 flex-shrink-0"></i>
+                            <span class="text-xs md:text-sm whitespace-nowrap">Product Report</span>
+                        </a>
                     </div>
                 </div>
 
@@ -179,6 +183,10 @@
                             <i class="fas fa-tags mr-3 text-indigo-600 flex-shrink-0"></i>
                             <span class="whitespace-nowrap">Category Management</span>
                         </a>
+                        <a onclick="selectMenu(this, 'productreport')" class="menu-item-mobile flex w-full rounded-full bg-white px-4 py-4 text-sm font-bold text-gray-700 hover:bg-gray-100 transition-colors items-center border border-gray-200">
+                            <i class="fas fa-warning mr-3 text-indigo-600 flex-shrink-0"></i>
+                            <span class="whitespace-nowrap">Product Report</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -268,6 +276,17 @@
                     console.error('Error loading Category Control:', error);
                     dynamicContent.innerHTML = '<div class="p-4"><h2 class="text-xl text-red-600">Error loading Category Control content</h2></div>';
                 });
+        } else if (section === 'productreport') {
+            fetch('${pageContext.request.contextPath}/admin?section=productreport')
+            .then(response => response.text())
+            .then(html => {
+                dynamicContent.innerHTML = html;
+                executeScripts(dynamicContent);
+            })
+            .catch(error => {
+                console.error('Error loading Product Report Control:', error);
+                dynamicContent.innerHTML = '<div class="p-4"><h2 class="text-xl text-red-600">Error loading Product Report Control content</h2></div>';
+            });
         }
     }
 

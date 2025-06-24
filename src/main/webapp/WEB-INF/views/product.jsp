@@ -152,7 +152,6 @@
                                         });
                                 }
 							</script>
-
 						</div>
 					</div>
 
@@ -204,6 +203,50 @@
 							Terhubung dengan whatsapp penjual
 						</button>
 					</div>
+					<!-- Report Button (with modal form) -->
+					<button
+						class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-4 px-6 rounded-lg transition duration-300 flex items-center justify-center cursor-pointer mt-3"
+						onclick="openReportModal()"
+						type="button"
+					>
+						<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M18.364 5.636l-1.414-1.414A9 9 0 003 12v7a2 2 0 002 2h14a2 2 0 002-2v-7a9 9 0 00-7.95-8.778zM12 17v.01"/>
+						</svg>
+						Laporkan Produk
+					</button>
+
+					<!-- Modal -->
+					<div id="reportModal" class="fixed inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center z-50 hidden">
+						<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+							<h2 class="text-lg font-semibold mb-4 text-gray-900">Laporkan Produk</h2>
+							<form action="product?menu=report_product&id=<%= product.getId() %>" method="post">
+								<label for="reason" class="block text-sm font-medium text-gray-700 mb-1">
+									Alasan laporan:
+								</label>
+								<input
+									type="text"
+									name="reason"
+									id="reason"
+									required
+									placeholder="Alasan kenapa produk harus dihapus..."
+									class="border p-2 rounded w-full mb-4"
+								>
+								<div class="flex justify-end space-x-2">
+									<button type="button" onclick="closeReportModal()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">Batal</button>
+									<button type="submit" class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white">Laporkan</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<script>
+						function openReportModal() {
+							document.getElementById('reportModal').classList.remove('hidden');
+						}
+						function closeReportModal() {
+							document.getElementById('reportModal').classList.add('hidden');
+						}
+					</script>
 
 					<script>
                         function openWhatsApp() {
